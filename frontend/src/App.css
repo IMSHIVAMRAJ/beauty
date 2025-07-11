@@ -1,0 +1,7 @@
+/* Custom badge styles for Home.jsx */
+.badge-pink {
+  @apply inline-block px-3 py-1 rounded-full bg-pink-500 text-white text-xs font-semibold shadow transition;
+}
+.badge-pink-light {
+  @apply inline-block px-3 py-1 rounded-full bg-pink-100 text-pink-700 text-xs font-semibold shadow transition;
+}

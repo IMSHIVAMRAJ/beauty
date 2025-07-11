@@ -1,0 +1,50 @@
+import Service from "../models/Service.js";
+
+export const addService = async (req, res) => {
+  const {
+    name,
+    category,
+    subcategory,
+    price,
+    discount,
+    descriptionPoints,
+  } = req.body;
+
+  const mainImage = req.files["mainImage"]?.[0]?.path;
+  const subImages = req.files["subImages"]?.map(file => file.path) || [];
+
+  const finalPrice = price - (price * (discount / 100));
+
+  const service = await Service.create({
+    name,
+    category,
+    subcategory,
+    price,
+    discount,
+    finalPrice,
+    descriptionPoints: JSON.parse(descriptionPoints),
+    mainImage,
+    subImages
+  });
+
+  res.status(201).json(service);
+};
+
+export const getAllServices = async (req, res) => {
+  const services = await Service.find();
+  res.status(200).json(services);
+};
+
+export const getTrendingServices = async (req, res) => {
+  const services = await Service.find().sort({ usageCount: -1 }).limit(5);
+  res.status(200).json(services);
+};
+export const approveService = async (req, res) => {
+  const service = await Service.findById(req.params.id);
+  if (!service) return res.status(404).json({ message: "Service not found" });
+
+  service.isApproved = true;
+  await service.save();
+
+  res.status(200).json({ message: "Service approved", service });
+};
