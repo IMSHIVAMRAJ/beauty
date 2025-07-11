@@ -11,6 +11,20 @@ const sections = [
   { name: "Location Management" },
   { name: "Coupon Management" },
   { name: "Booking Control" },
+  { name: "Skin Problem" },
+  { name: "Hair Problem" },
+];
+
+const mockSkinProblems = [
+  { name: "Aarti Sharma", number: "9876543210", problem: "Acne and pigmentation" },
+  { name: "Priya Singh", number: "9123456780", problem: "Dry skin and redness" },
+  { name: "Meena Kumari", number: "9988776655", problem: "Dark spots" },
+];
+
+const mockHairProblems = [
+  { name: "Rohit Verma", number: "9876501234", problem: "Hair fall and dandruff" },
+  { name: "Sonal Jain", number: "9001122334", problem: "Split ends" },
+  { name: "Kiran Patel", number: "9876123450", problem: "Premature greying" },
 ];
 
 const AdminDashboard = () => {
@@ -45,6 +59,52 @@ const AdminDashboard = () => {
           {active === "Location Management" && <LocationManagement />}
           {active === "Coupon Management" && <CouponManagement />}
           {active === "Booking Control" && <BookingControl />}
+          {active === "Skin Problem" && (
+            <div className="w-full">
+              <h3 className="text-xl font-bold mb-4">Skin Problem Submissions</h3>
+              <table className="w-full bg-white rounded-xl shadow border">
+                <thead>
+                  <tr className="bg-pink-100 text-pink-800">
+                    <th className="py-2 px-4 text-left">Name</th>
+                    <th className="py-2 px-4 text-left">Number</th>
+                    <th className="py-2 px-4 text-left">Problem</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {mockSkinProblems.map((row, idx) => (
+                    <tr key={idx} className="border-t">
+                      <td className="py-2 px-4">{row.name}</td>
+                      <td className="py-2 px-4">{row.number}</td>
+                      <td className="py-2 px-4">{row.problem}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          {active === "Hair Problem" && (
+            <div className="w-full">
+              <h3 className="text-xl font-bold mb-4">Hair Problem Submissions</h3>
+              <table className="w-full bg-white rounded-xl shadow border">
+                <thead>
+                  <tr className="bg-pink-100 text-pink-800">
+                    <th className="py-2 px-4 text-left">Name</th>
+                    <th className="py-2 px-4 text-left">Number</th>
+                    <th className="py-2 px-4 text-left">Problem</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {mockHairProblems.map((row, idx) => (
+                    <tr key={idx} className="border-t">
+                      <td className="py-2 px-4">{row.name}</td>
+                      <td className="py-2 px-4">{row.number}</td>
+                      <td className="py-2 px-4">{row.problem}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </main>
     </div>

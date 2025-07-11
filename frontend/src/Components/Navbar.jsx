@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useCart } from './CartContext';
 
 const navLinks = [
-  { name: 'Home', icon: <Home className="w-5 h-5 mr-1" />, href: '#' },
+  { name: 'Home', icon: <Home className="w-5 h-5 mr-1" />, href: '/' },
   { name: 'Consultation', icon: <Stethoscope className="w-5 h-5 mr-1" />, href: '#' },
   { name: 'Booking', icon: <CalendarCheck2 className="w-5 h-5 mr-1" />, href: '/cart' },
   { name: 'Refer', icon: <Share2 className="w-5 h-5 mr-1" />, href: '#' },

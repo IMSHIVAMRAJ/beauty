@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Mail, HelpCircle, Home as HomeIcon, Stethoscope, CalendarCheck2, Share2, Instagram, Facebook, Twitter, Youtube, Star, Heart, ChevronLeft, ChevronRight, Play, X } from 'lucide-react';
 import ServicesModal from '../Components/ServicesModal';
 
@@ -13,29 +14,18 @@ const promoImg = 'https://plus.unsplash.com/premium_photo-1684407616442-8d5a1b7c
 
 // Service Categories
 const services = [
-  { name: 'Salon At Home', img: 'https://images.unsplash.com/photo-1498843053639-170ff2122f35?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', },
-  { name: 'Makeup At Home', img: 'https://plus.unsplash.com/premium_photo-1683133990522-4155deaacbbb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', },
-  { name: 'Pre Bridal', img: 'https://plus.unsplash.com/premium_photo-1679522617451-30ad4b62cf84?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', },
-  { name: 'Hair Studio', img: 'https://images.unsplash.com/photo-1498843053639-170ff2122f35?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', },
-  { name: 'Make your package', img: 'https://plus.unsplash.com/premium_photo-1683133990522-4155deaacbbb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', },
-];
-
-// Doctor Section
-const doctors = [
-  { name: 'Dr. Aeavna Ar.', title: 'Skin Specialist', rating: 4.87, img: 'https://randomuser.me/api/portraits/men/32.jpg' },
-  { name: 'Dr. Pooja Hr.', title: 'Skin Specialist', rating: 4.92, img: 'https://randomuser.me/api/portraits/women/44.jpg' },
+  { name: 'Salon At Home', img: 'https://images.unsplash.com/photo-1498843053639-170ff2122f35?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', path: '/salon-at-home' },
+  { name: 'Makeup At Home', img: 'https://plus.unsplash.com/premium_photo-1683133990522-4155deaacbbb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', path: '/makeup-at-home' },
+  { name: 'Pre Bridal', img: 'https://plus.unsplash.com/premium_photo-1679522617451-30ad4b62cf84?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', path: '/pre-bridal' },
+  { name: 'Hair Studio', img: 'https://images.unsplash.com/photo-1498843053639-170ff2122f35?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', path: '/hair-studio' },
+  { name: 'Make your package', img: 'https://plus.unsplash.com/premium_photo-1683133990522-4155deaacbbb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', path: '/make-your-package' },
 ];
 
 // Trending Services
 const trendingTabs = ['Trending Services', 'Spa At Home', 'Hydra Facials'];
-const trendingNearTabs = ['Waxing', 'Facial', 'Hydra Facials', 'Stress Relief'];
 const trendingServices = [
   { title: 'Swedish Stress Relief Massage', subtitle: 'Stress Relief Care', price: '₹880', img: 'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&w=200', tag: 'Add to Cart', offer: '20% OFF', rating: 4.8, reviews: 120 },
   { title: 'Hydra Facial', subtitle: 'Glow & Hydrate', price: '₹1200', img: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&w=200', tag: 'Add to Cart', offer: '', rating: 4.9, reviews: 98 },
-];
-const trendingNearYou = [
-  { title: 'Rice Roll-On-Waxing', subtitle: 'Waxing', price: '₹680', img: 'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&w=200', tag: 'Add to Cart', offer: '15% OFF', rating: 4.7, reviews: 80 },
-  { title: 'Hydra Facials', subtitle: 'Facial', price: '₹950', img: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&w=200', tag: 'Add to Cart', offer: '', rating: 4.8, reviews: 110 },
 ];
 
 const ServiceCard = ({ img, title, subtitle, price, tag, offer, rating, reviews }) => (
@@ -61,17 +51,6 @@ const ServiceCard = ({ img, title, subtitle, price, tag, offer, rating, reviews 
     </div>
   </div>
 );
-
-// Ratings/Reviews
-const clientReviews = [
-  { name: 'Sehera R.', rating: 5.0, review: 'Amazing experience! Her skincare tips worked wonders for me.', services: 'Facial, Mask', img: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&w=200' },
-  { name: 'Anaya Ar.', rating: 5.0, review: 'Amazing experience! Highly recommended.', services: 'Facial, Mask', img: 'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&w=200' },
-];
-const videoReviews = [
-  { title: 'face pack', reviews: 150, rating: 5.0, img: 'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&w=400', liked: true },
-  { title: 'hair spa', reviews: 120, rating: 4.8, img: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&w=400', liked: false },
-  { title: 'manicure', reviews: 90, rating: 4.9, img: 'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&w=400', liked: false },
-];
 
 // Contact/Social
 const navLinks = [
@@ -99,7 +78,6 @@ const allServices = [
 const Home = () => {
   const [current, setCurrent] = useState(0);
   const [activeTrending, setActiveTrending] = useState(0);
-  const [activeNear, setActiveNear] = useState(0);
   const [showAllServices, setShowAllServices] = useState(false);
 
   useEffect(() => {
@@ -143,10 +121,10 @@ const Home = () => {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4">
           {services.map((service) => (
-            <div
+            <Link
+              to={service.path}
               key={service.name}
               className="flex flex-col items-center cursor-pointer group"
-              onClick={() => setShowAllServices(true)}
             >
               <img
                 src={service.img}
@@ -154,7 +132,7 @@ const Home = () => {
                 className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 object-cover rounded-2xl mb-2 sm:mb-4 group-hover:scale-105 transition"
               />
               <span className="text-base sm:text-xl font-bold text-pink-700 group-hover:text-pink-900 transition text-center">{service.name}</span>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
@@ -166,21 +144,6 @@ const Home = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-pink-500/80 via-pink-500/50 to-transparent flex items-center justify-center">
             <h2 className="w-full text-center text-base sm:text-lg md:text-2xl font-extrabold text-white drop-shadow-lg">MAKE-UP ITEMS THAT YOU<br /> MUST HAVE</h2>
           </div>
-        </div>
-      </section>
-
-      {/* Doctor Section */}
-      <section className="w-full max-w-[1400px] mx-auto bg-white rounded-2xl shadow p-2 sm:p-4 md:p-6 mb-4 sm:mb-6 mt-2">
-        <h2 className="text-base sm:text-lg font-semibold text-center mb-2 sm:mb-4">Doctor</h2>
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-4">
-          {doctors.map((doc, idx) => (
-            <div key={idx} className="bg-black rounded-xl flex flex-col items-center px-4 sm:px-6 py-3 sm:py-4 min-w-[140px] sm:min-w-[180px]">
-              <img src={doc.img} alt={doc.name} className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-4 border-white mb-2 sm:mb-3 object-cover" />
-              <div className="text-white font-bold text-base sm:text-lg">{doc.name}</div>
-              <div className="text-white text-xs sm:text-sm mb-1">{doc.title}</div>
-              <div className="flex items-center gap-1 text-yellow-400 text-xs font-semibold">★ {doc.rating}</div>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -205,90 +168,6 @@ const Home = () => {
           {trendingServices.map((service, idx) => (
             <ServiceCard key={idx} {...service} />
           ))}
-        </div>
-      </section>
-
-      {/* Trending Near You */}
-      <section className="w-full max-w-[1400px] mx-auto bg-white rounded-2xl shadow p-2 sm:p-4 md:p-6 mb-4 sm:mb-6">
-        <div className="flex items-center justify-between mb-2 sm:mb-3">
-          <h3 className="text-base font-semibold">Trending Near You</h3>
-          <span className="text-pink-500 text-xl sm:text-2xl font-bold select-none">↷</span>
-        </div>
-        <div className="flex gap-1 sm:gap-2 mb-2 sm:mb-4 overflow-x-auto scrollbar-hide">
-          {trendingNearTabs.map((tab, idx) => (
-            <button
-              key={tab}
-              onClick={() => setActiveNear(idx)}
-              className={`px-2 sm:px-3 py-1 rounded-full text-xs font-semibold transition ${activeNear === idx ? 'bg-pink-500 text-white' : 'bg-gray-100 text-gray-700'}`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
-          {trendingNearYou.map((service, idx) => (
-            <ServiceCard key={idx} {...service} />
-          ))}
-        </div>
-      </section>
-
-      {/* Client Reviews */}
-      <section className="w-full max-w-[1400px] mx-auto bg-white rounded-2xl shadow p-2 sm:p-4 md:p-6 mb-4 sm:mb-6">
-        <h2 className="text-base sm:text-lg font-semibold mb-2 sm:mb-4">Clients (Review & Rating)</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
-          {clientReviews.map((client, idx) => (
-            <div key={idx} className="rounded-xl overflow-hidden bg-black/70 relative min-h-[180px] sm:min-h-[260px]">
-              <img src={client.img} alt={client.name} className="w-full h-28 sm:h-40 object-cover" />
-              <div className="absolute inset-0 bg-black/50" />
-              <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 z-10">
-                <div className="text-white font-bold text-base sm:text-lg flex items-center gap-2">
-                  {client.name}
-                  <span className="flex items-center bg-yellow-400 text-black text-xs font-bold px-1.5 sm:px-2 py-0.5 rounded ml-2">
-                    <Star className="w-4 h-4 mr-1 fill-yellow-400" />
-                    {client.rating}
-                  </span>
-                </div>
-                <div className="text-xs text-white mt-1 truncate">{client.review}</div>
-                <div className="text-xs text-white mt-2 font-semibold">
-                  Services Taken: <span className="font-normal">{client.services}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Video Reviews Carousel */}
-      <section className="w-full max-w-[1400px] mx-auto mt-6 sm:mt-10 flex flex-col items-center">
-        <div className="flex items-center w-full">
-          <button className="p-2 rounded-full bg-white shadow hover:bg-gray-100 transition mr-1 sm:mr-2">
-            <ChevronLeft className="w-6 h-6 text-gray-500" />
-          </button>
-          <div className="flex-1 flex gap-2 sm:gap-4 overflow-x-auto scrollbar-hide">
-            {videoReviews.map((video, idx) => (
-              <div key={idx} className="relative min-w-[160px] sm:min-w-[220px] max-w-[200px] sm:max-w-[260px] rounded-2xl overflow-hidden shadow-lg">
-                <img src={video.img} alt={video.title} className="w-full h-32 sm:h-44 object-cover" />
-                <div className="absolute inset-0 bg-black/40" />
-                <div className="absolute top-2 sm:top-3 left-2 sm:left-3 text-white text-xs font-bold bg-black/40 px-1.5 sm:px-2 py-1 rounded">
-                  {video.title}
-                  <span className="block text-[10px] font-normal">{video.reviews} Reviews</span>
-                </div>
-                <button className="absolute top-2 sm:top-3 right-2 sm:right-3 p-1 rounded-full bg-white/80 hover:bg-white">
-                  <Heart className={`w-5 h-5 ${video.liked ? 'fill-pink-500 text-pink-500' : 'text-gray-400'}`} />
-                </button>
-                <button className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full">
-                  <Play className="w-6 h-6 text-pink-500" />
-                </button>
-                <div className="absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 bg-white rounded-full px-2 sm:px-3 py-1 flex items-center gap-1 shadow">
-                  <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                  <span className="text-xs sm:text-sm font-bold text-gray-800">{video.rating}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <button className="p-2 rounded-full bg-white shadow hover:bg-gray-100 transition ml-1 sm:ml-2">
-            <ChevronRight className="w-6 h-6 text-gray-500" />
-          </button>
         </div>
       </section>
 
