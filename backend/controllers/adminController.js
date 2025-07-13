@@ -78,15 +78,26 @@ export const deleteBeautician = async (req, res) => {
   res.status(200).json({ message: "Beautician deleted" });
 };
 
+
 export const addLocation = async (req, res) => {
-  const { city } = req.body;
+  const { city, state } = req.body;
 
-  const exists = await Location.findOne({ city });
-  if (exists)
-    return res.status(400).json({ message: "Location already exists" });
+  if (!city || !state) {
+    return res.status(400).json({ message: "City and state are required" });
+  }
 
-  const location = await Location.create({ city });
-  res.status(201).json({ message: "Location added", location });
+  try {
+    const exists = await Location.findOne({ city });
+    if (exists) {
+      return res.status(400).json({ message: "Location already exists" });
+    }
+
+    const location = await Location.create({ city, state });
+    res.status(201).json({ message: "Location added", location });
+  } catch (error) {
+    console.error("Error adding location:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 export const getLocations = async (req, res) => {

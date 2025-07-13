@@ -6,6 +6,7 @@ const serviceSchema = new mongoose.Schema({
   subcategory: String,
   mainImage: String,
   subImages: [String],
+  categoryImage: String,
   price: Number,
   discount: Number,
   finalPrice: Number,
