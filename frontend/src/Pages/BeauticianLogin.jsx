@@ -22,6 +22,13 @@ const BeauticianLogin = () => {
     setTimeout(() => {
       setSuccess("Login successful!");
       setLoading(false);
+      // Store beautician data in localStorage
+      localStorage.setItem('beauticianToken', 'mock-token');
+      localStorage.setItem('beauticianData', JSON.stringify({
+        id: 'beautician-1',
+        name: 'Beautician',
+        email: identifier
+      }));
       setTimeout(() => navigate("/beautician/dashboard"), 1000);
     }, 1000);
   };

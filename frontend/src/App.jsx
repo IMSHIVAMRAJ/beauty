@@ -11,6 +11,7 @@ import Footer from './Components/Footer';
 import AdminLogin from './Pages/AdminLogin';
 import AdminDashboard from './Pages/AdminDashboard';
 import BeauticianLogin from './Pages/BeauticianLogin';
+import BeauticianDashboard from './Pages/BeauticianDashboard';
 import OTPVerify from './Pages/OTPVerify';
 import SalonAtHome from './Pages/SalonAtHome';
 import MakeupAtHome from './Pages/MakeupAtHome';
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/beautician/login" element={<BeauticianLogin />} />
+          <Route path="/beautician/dashboard" element={<BeauticianDashboard />} />
         </Routes>
       </div>
       <Footer />
