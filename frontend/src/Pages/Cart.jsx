@@ -69,7 +69,7 @@ const Cart = () => {
     }
     const options = {
       key: 'rzp_test_1234567890abcdef', // Replace with your Razorpay test key
-      amount: totalAmount * 100, // in paise
+      amount: total * 100, // in paise
       currency: 'INR',
       name: 'Yes Madam',
       description: 'Cart Payment',
@@ -165,9 +165,8 @@ const Cart = () => {
 
         {/* Cart Summary Section */}
         <aside className="w-full lg:w-80 bg-white rounded-xl shadow-lg p-4 sm:p-6 h-fit">
-          <div className="text-base sm:text-lg font-semibold mb-2">Subtotal ({cart.length} items): <span className="text-pink-700 font-bold">₹{total}</span></div>
           <div className="mt-8 flex flex-col items-center">
-            <div className="text-lg font-bold mb-4">Total: ₹{totalAmount}</div>
+            <div className="text-lg font-bold mb-4">Total: ₹{total}</div>
             <button
               onClick={handlePayNow}
               className="w-full max-w-xs py-3 bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white rounded-lg font-bold text-lg shadow-md tracking-wide transition disabled:opacity-70 disabled:cursor-not-allowed"
