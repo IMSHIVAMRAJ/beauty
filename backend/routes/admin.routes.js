@@ -14,7 +14,7 @@ import {
 } from "../controllers/adminController.js";
 
 import { protect, adminOnly } from "../middlewares/authMiddleware.js";
-import { approveService } from "../controllers/serviceController.js";
+import { addService, approveService, deleteService, getAllServices } from "../controllers/serviceController.js";
 import { upload } from "../middlewares/multer.js";
 const router = express.Router();
 
@@ -43,4 +43,17 @@ router.get("/coupons", protect, adminOnly, getCoupons);
 router.patch("/coupon/:id/toggle", protect, adminOnly, toggleCouponStatus);
 router.patch("/service/:id/approve", protect, adminOnly, approveService);
 
+router.post(
+  "/add-service",
+  // isAdmin, // uncomment if you want to restrict to only admin
+  upload.fields([
+    { name: "mainImage", maxCount: 1 },
+    { name: "subImages", maxCount: 5 },
+    { name: "categoryImage", maxCount: 1 }
+  ]),
+  addService
+);
+router.get("/getservices", getAllServices);
 export default router;
+router.delete("/service/:id", protect, adminOnly, deleteService);
+

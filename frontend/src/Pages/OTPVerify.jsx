@@ -6,7 +6,8 @@ const BASE_URL = "http://localhost:5000";
 const OTPVerify = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const phone = location.state?.phone || "";
+  const phone = location.state?.phone || ""; // ✅ just 10-digit number
+
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -14,15 +15,17 @@ const OTPVerify = () => {
   const [resendLoading, setResendLoading] = useState(false);
   const [resendSuccess, setResendSuccess] = useState("");
 
-  // Verify OTP
+  // ✅ Verify OTP
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
+
     if (!/^\d{4,6}$/.test(otp)) {
       setError("Please enter a valid OTP.");
       return;
     }
+
     setLoading(true);
     try {
       const res = await fetch(`${BASE_URL}/api/auth/verify-otp`, {
@@ -31,7 +34,7 @@ const OTPVerify = () => {
         body: JSON.stringify({ phone, otp }),
       });
       const data = await res.json();
-      if (data.success) {
+      if (data.token) {
         setSuccess("Login successful!");
         localStorage.setItem("token", data.token);
         setTimeout(() => navigate("/"), 1000);
@@ -44,11 +47,12 @@ const OTPVerify = () => {
     setLoading(false);
   };
 
-  // Resend OTP
+  // 🔁 Resend OTP
   const handleResendOtp = async () => {
     setResendLoading(true);
     setResendSuccess("");
     setError("");
+
     try {
       const res = await fetch(`${BASE_URL}/api/auth/send-otp`, {
         method: "POST",
@@ -95,6 +99,7 @@ const OTPVerify = () => {
         {error && <div className="text-[#E90000] mb-3 font-medium">{error}</div>}
         {success && <div className="text-sky-400 mb-3 font-medium">{success}</div>}
         {resendSuccess && <div className="text-green-600 mb-3 font-medium">{resendSuccess}</div>}
+
         <button
           type="submit"
           className="w-full py-3 bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white rounded-lg font-bold text-lg mt-1 shadow-md tracking-wide transition disabled:opacity-70 disabled:cursor-not-allowed"
@@ -102,6 +107,7 @@ const OTPVerify = () => {
         >
           {loading ? "Please wait..." : "Verify OTP"}
         </button>
+
         <button
           type="button"
           onClick={handleResendOtp}
@@ -110,6 +116,7 @@ const OTPVerify = () => {
         >
           {resendLoading ? "Resending..." : "Resend OTP"}
         </button>
+
         <button
           type="button"
           onClick={() => navigate("/otp-login")}
@@ -123,4 +130,4 @@ const OTPVerify = () => {
   );
 };
 
-export default OTPVerify; 
+export default OTPVerify;

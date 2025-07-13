@@ -2,6 +2,7 @@ import express from "express";
 import {
   addService,
   approveService,
+  deleteService,
   getAllServices,
   getTrendingServices,
 } from "../controllers/serviceController.js";
@@ -20,8 +21,8 @@ router.post(
   addService
 );
 
-router.get("/", getAllServices);
+router.get("/allservices", getAllServices);
 router.get("/trending", getTrendingServices);
 router.patch("/service/:id/approve", protect, adminOnly, approveService);
-
+router.delete("/service/:id", protect, adminOnly, deleteService);
 export default router;

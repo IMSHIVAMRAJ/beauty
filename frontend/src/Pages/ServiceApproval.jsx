@@ -1,263 +1,273 @@
-import React, { useState } from "react";
-
-const mockServices = [
-  { id: 1, name: "Facial Glow", beautician: "Aarti Sharma", category: "Facial", status: "Pending" },
-  { id: 2, name: "Hair Spa", beautician: "Priya Singh", category: "Hair", status: "Pending" },
-  { id: 3, name: "Manicure", beautician: "Neha Verma", category: "Nails", status: "Pending" },
-];
-
-const statusColors = {
-  Pending: "bg-pink-100 text-pink-700",
-  Approved: "bg-green-100 text-green-700",
-  Rejected: "bg-red-100 text-red-700",
-};
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const ServiceApproval = () => {
-  const [services, setServices] = useState(mockServices);
-  const [showModal, setShowModal] = useState(false);
-  const [modalService, setModalService] = useState(null);
+  const [services, setServices] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [form, setForm] = useState({
     name: '',
-    beautician: '',
     category: '',
+    subcategory: '',
     price: '',
-    description: '',
-    image: '',
-    status: 'Pending',
+    discount: '',
+    descriptionPoints: '',
+    mainImage: null,
+    subImages: [],
+    categoryImage: null, // ✅ Added
   });
 
-  const openAddModal = () => {
-    setForm({ name: '', beautician: '', category: '', price: '', description: '', image: '', status: 'Pending' });
-    setShowAddModal(true);
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+  const fetchServices = async () => {
+    try {
+      const token = localStorage.getItem("adminToken");
+      const res = await axios.get("http://localhost:5000/api/admin/getservices", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const fetched = res.data.services || res.data;
+      setServices(fetched);
+    } catch (err) {
+      console.error("Fetch error: ", err.response?.data || err.message);
+    }
   };
 
-  const handleFormChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleApprove = async (id) => {
+    try {
+      const token = localStorage.getItem("adminToken");
+      await axios.patch(`http://localhost:5000/api/admin/service/${id}/approve`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setServices(prev =>
+        prev.map(s =>
+          s._id === id ? { ...s, isApproved: true } : s
+        )
+      );
+      alert("Service approved ✅");
+    } catch (err) {
+      console.error("Approval error:", err.response?.data || err.message);
+      alert("Failed to approve service ❌");
+    }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this service?")) return;
+    try {
+      const token = localStorage.getItem("adminToken");
+      await axios.delete(`http://localhost:5000/api/admin/service/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setServices(prev => prev.filter(s => s._id !== id));
+      alert("Service deleted ✅");
+    } catch (err) {
+      console.error("Delete error:", err.response?.data || err.message);
+      alert("Failed to delete service ❌");
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    if (name === "mainImage") {
+      setForm(prev => ({ ...prev, mainImage: files[0] }));
+    } else if (name === "subImages") {
+      setForm(prev => ({ ...prev, subImages: Array.from(files) }));
+    } else if (name === "categoryImage") {
+      setForm(prev => ({ ...prev, categoryImage: files[0] }));
+    }
+  };
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    setServices([
-      ...services,
-      { id: Date.now(), ...form },
-    ]);
-    setShowAddModal(false);
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("category", form.category);
+    formData.append("subcategory", form.subcategory);
+    formData.append("price", form.price);
+    formData.append("discount", form.discount);
+    formData.append("descriptionPoints", JSON.stringify(form.descriptionPoints.split(",")));
+    formData.append("mainImage", form.mainImage);
+    form.subImages.forEach(file => formData.append("subImages", file));
+    if (form.categoryImage) {
+      formData.append("categoryImage", form.categoryImage); // ✅ Append only if present
+    }
+
+    try {
+      const token = localStorage.getItem("adminToken");
+      await axios.post("http://localhost:5000/api/admin/add-service", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      alert("Service added ✅");
+      setShowAddModal(false);
+      fetchServices();
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("Failed to add service ❌");
+    }
   };
 
-  const handleApprove = (id) => {
-    setServices(services.map(s => s.id === id ? { ...s, status: "Approved" } : s));
-  };
-  const handleReject = (id) => {
-    setServices(services.map(s => s.id === id ? { ...s, status: "Rejected" } : s));
-  };
-  const handleView = (service) => {
-    setModalService(service);
-    setShowModal(true);
+  const getFinalPrice = (price, discount) => {
+    return price - (price * discount) / 100;
   };
 
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-black">Service Approval</h3>
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-bold text-black">Admin - Service Panel</h2>
         <button
-          className="bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white px-5 py-2 rounded-lg font-semibold shadow hover:opacity-90 transition"
-          onClick={openAddModal}
+          className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-md font-medium"
+          onClick={() => setShowAddModal(true)}
         >
           Add Service
         </button>
       </div>
-      <div className="overflow-x-auto rounded-xl shadow bg-white/90">
+
+      <div className="overflow-x-auto bg-white rounded-xl shadow">
         <table className="min-w-full text-sm">
-          <thead>
-            <tr className="bg-pink-50 text-pink-700">
-              <th className="py-3 px-4 text-left font-semibold">Service Name</th>
-              <th className="py-3 px-4 text-left font-semibold">Beautician</th>
-              <th className="py-3 px-4 text-left font-semibold">Category</th>
-              <th className="py-3 px-4 text-left font-semibold">Status</th>
-              <th className="py-3 px-4 text-center font-semibold">Actions</th>
+          <thead className="bg-pink-100 text-pink-700 font-semibold">
+            <tr>
+              <th className="py-3 px-4 text-left">Name</th>
+              <th className="py-3 px-4 text-left">Category</th>
+              <th className="py-3 px-4 text-left">Subcategory</th>
+              <th className="py-3 px-4 text-left">Price</th>
+              <th className="py-3 px-4 text-left">Discount</th>
+              <th className="py-3 px-4 text-left">Final Price</th>
+              <th className="py-3 px-4 text-left">Status</th>
+              <th className="py-3 px-4 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {services.map((s) => (
-              <tr key={s.id} className="border-b last:border-b-0 hover:bg-pink-50/40">
-                <td className="py-3 px-4">{s.name}</td>
-                <td className="py-3 px-4">{s.beautician}</td>
-                <td className="py-3 px-4">{s.category}</td>
-                <td className="py-3 px-4">
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColors[s.status] || "bg-gray-100 text-gray-700"}`}>
-                    {s.status}
-                  </span>
+            {services.length > 0 ? services.map((s) => (
+              <tr key={s._id} className="border-b hover:bg-pink-50">
+                <td className="py-2 px-4">{s.name}</td>
+                <td className="py-2 px-4">{s.category}</td>
+                <td className="py-2 px-4">{s.subcategory}</td>
+                <td className="py-2 px-4">₹{s.price}</td>
+                <td className="py-2 px-4">{s.discount}%</td>
+                <td className="py-2 px-4">₹{getFinalPrice(s.price, s.discount)}</td>
+                <td className="py-2 px-4 capitalize">
+                  {s.isApproved ? "Approved" : "Pending"}
                 </td>
-                <td className="py-3 px-4 text-center space-x-2">
-                  {s.status === "Pending" && (
-                    <>
-                      <button
-                        className="text-green-600 hover:underline text-xs font-semibold"
-                        onClick={() => handleApprove(s.id)}
-                      >
-                        Approve
-                      </button>
-                      <button
-                        className="text-red-600 hover:underline text-xs font-semibold"
-                        onClick={() => handleReject(s.id)}
-                      >
-                        Reject
-                      </button>
-                    </>
+                <td className="py-2 px-4 text-center space-x-2">
+                  {!s.isApproved && (
+                    <button
+                      onClick={() => handleApprove(s._id)}
+                      className="text-green-600 hover:underline font-medium text-xs"
+                    >
+                      Approve
+                    </button>
                   )}
                   <button
-                    className="text-blue-600 hover:underline text-xs font-semibold"
-                    onClick={() => handleView(s)}
+                    onClick={() => handleDelete(s._id)}
+                    className="text-red-600 hover:underline font-medium text-xs ml-2"
                   >
-                    View
+                    Delete
                   </button>
                 </td>
               </tr>
-            ))}
-            {services.length === 0 && (
+            )) : (
               <tr>
-                <td colSpan={5} className="py-6 text-center text-gray-400">No services found.</td>
+                <td colSpan={8} className="text-center py-6 text-gray-500">No services found.</td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
-      {/* Modal */}
-      {showModal && modalService && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-          <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md relative">
-            <button
-              type="button"
-              className="absolute top-3 right-4 text-gray-400 hover:text-pink-500 text-xl"
-              onClick={() => setShowModal(false)}
-            >
-              &times;
-            </button>
-            <h4 className="text-lg font-bold mb-4 text-black">Service Details</h4>
-            <div className="mb-3"><span className="font-semibold text-black">Service Name:</span> {modalService.name}</div>
-            <div className="mb-3"><span className="font-semibold text-black">Beautician:</span> {modalService.beautician}</div>
-            <div className="mb-3"><span className="font-semibold text-black">Category:</span> {modalService.category}</div>
-            <div className="mb-3"><span className="font-semibold text-black">Status:</span> <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColors[modalService.status]}`}>{modalService.status}</span></div>
-          </div>
-        </div>
-      )}
+
+      {/* Add Modal */}
       {showAddModal && (
-        <div className="absolute left-0 top-0 w-full h-full z-30 flex items-center justify-center bg-black/30" style={{ minHeight: '100%', minWidth: '100%' }}>
+        <div className="fixed inset-0 bg-black/40 z-50 flex justify-center items-center">
           <form
             onSubmit={handleFormSubmit}
-            className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md relative"
-            style={{ maxHeight: '90vh', overflowY: 'auto' }}
+            className="bg-white p-6 rounded-xl shadow-lg w-full max-w-lg"
+            encType="multipart/form-data"
           >
-            <button
-              type="button"
-              className="absolute top-3 right-4 text-gray-400 hover:text-pink-500 text-xl"
-              onClick={() => setShowAddModal(false)}
-            >
-              &times;
-            </button>
-            <h4 className="text-lg font-bold mb-4 text-black">Add Service</h4>
-            <div className="mb-4">
-              <label className="block font-semibold mb-1 text-black">Service Name</label>
-              <input
-                name="name"
-                value={form.name}
-                onChange={handleFormChange}
-                className="w-full px-4 py-2 rounded-lg border-2 border-pink-200 bg-pink-50 text-black font-medium focus:border-pink-400 focus:outline-none transition"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block font-semibold mb-1 text-black">Beautician</label>
-              <input
-                name="beautician"
-                value={form.beautician}
-                onChange={handleFormChange}
-                className="w-full px-4 py-2 rounded-lg border-2 border-pink-200 bg-pink-50 text-black font-medium focus:border-pink-400 focus:outline-none transition"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block font-semibold mb-1 text-black">Category</label>
-              <input
-                name="category"
-                value={form.category}
-                onChange={handleFormChange}
-                className="w-full px-4 py-2 rounded-lg border-2 border-pink-200 bg-pink-50 text-black font-medium focus:border-pink-400 focus:outline-none transition"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block font-semibold mb-1 text-black">Price</label>
-              <input
-                name="price"
-                type="number"
-                value={form.price}
-                onChange={handleFormChange}
-                className="w-full px-4 py-2 rounded-lg border-2 border-pink-200 bg-pink-50 text-black font-medium focus:border-pink-400 focus:outline-none transition"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block font-semibold mb-1 text-black">Description</label>
-              <textarea
-                name="description"
-                value={form.description}
-                onChange={handleFormChange}
-                className="w-full px-4 py-2 rounded-lg border-2 border-pink-200 bg-pink-50 text-black font-medium focus:border-pink-400 focus:outline-none transition"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block font-semibold mb-1 text-black">Image</label>
-              <div className="flex flex-col gap-2">
-                <label htmlFor="service-image-upload" className="inline-block cursor-pointer px-5 py-2 bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white rounded-lg font-semibold shadow hover:opacity-90 transition w-fit">
-                  {form.image ? 'Change Image' : 'Choose Image'}
-                </label>
+            <h3 className="text-lg font-bold mb-4 text-black">Add New Service</h3>
+
+            {["name", "category", "subcategory", "price", "discount"].map((field) => (
+              <div className="mb-3" key={field}>
+                <label className="block mb-1 font-medium capitalize">{field}</label>
                 <input
-                  id="service-image-upload"
-                  type="file"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={async (e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        setForm((prev) => ({ ...prev, image: reader.result, imageFileName: file.name }));
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                  required={!form.image}
+                  type={field === "price" || field === "discount" ? "number" : "text"}
+                  name={field}
+                  value={form[field]}
+                  onChange={handleInputChange}
+                  className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300"
+                  required
                 />
-                {form.imageFileName && (
-                  <span className="text-sm text-gray-700 font-medium">Selected: {form.imageFileName}</span>
-                )}
-                {form.image && (
-                  <img src={form.image} alt="Preview" className="mt-2 rounded-lg max-h-32 object-contain border" />
-                )}
               </div>
+            ))}
+
+            <div className="mb-3">
+              <label className="block mb-1 font-medium">Description Points (comma separated)</label>
+              <textarea
+                name="descriptionPoints"
+                value={form.descriptionPoints}
+                onChange={handleInputChange}
+                className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-pink-300"
+                required
+              />
             </div>
-            <div className="mb-6">
-              <label className="block font-semibold mb-1 text-black">Status</label>
-              <select
-                name="status"
-                value={form.status}
-                onChange={handleFormChange}
-                className="w-full px-4 py-2 rounded-lg border-2 border-pink-200 bg-pink-50 text-black font-medium focus:border-pink-400 focus:outline-none transition"
+
+            <div className="mb-3">
+              <label className="block mb-1 font-medium">Main Image</label>
+              <input
+                type="file"
+                name="mainImage"
+                onChange={handleFileChange}
+                accept="image/*"
+                className="w-full"
+                required
+              />
+            </div>
+
+            <div className="mb-3">
+              <label className="block mb-1 font-medium">Sub Images</label>
+              <input
+                type="file"
+                name="subImages"
+                onChange={handleFileChange}
+                multiple
+                accept="image/*"
+                className="w-full"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-1 font-medium">Category Image (Optional)</label>
+              <input
+                type="file"
+                name="categoryImage"
+                onChange={handleFileChange}
+                accept="image/*"
+                className="w-full"
+              />
+            </div>
+
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setShowAddModal(false)}
+                className="bg-gray-300 px-4 py-2 rounded-md text-black font-medium"
               >
-                <option value="Pending">Pending</option>
-                <option value="Approved">Approved</option>
-                <option value="Rejected">Rejected</option>
-              </select>
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-pink-600 text-white px-4 py-2 rounded-md font-semibold"
+              >
+                Add Service
+              </button>
             </div>
-            <button
-              type="submit"
-              className="w-full py-3 bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white rounded-lg font-bold text-lg shadow-md tracking-wide transition"
-            >
-              Add
-            </button>
           </form>
         </div>
       )}
@@ -265,4 +275,4 @@ const ServiceApproval = () => {
   );
 };
 
-export default ServiceApproval; 
+export default ServiceApproval;

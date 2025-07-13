@@ -46,7 +46,7 @@ const Cart = () => {
 
   // Mock total amount (replace with actual cart total)
   const totalAmount = 499;
-
+   
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
       if (document.getElementById('razorpay-script')) return resolve(true);
