@@ -16,12 +16,13 @@ const bookingSchema = new mongoose.Schema(
     date: String,
     timeSlot: String,
 
-    status: {
-      type: String,
-      enum: ["pending", "accepted", "completed", "cancelled"],
-      default: "pending",
-    },
-
+  
+status: {
+  type: String,
+  enum: ["pending", "approved", "confirmed", "cancelled"],
+  default: "pending"
+}
+,
     paymentStatus: {
       type: String,
       enum: ["unpaid", "paid"],
@@ -36,5 +37,6 @@ beautician: { type: mongoose.Schema.Types.ObjectId, ref: "Beautician" },
   },
   { timestamps: true }
 );
+
 
 export default mongoose.model("Booking", bookingSchema);

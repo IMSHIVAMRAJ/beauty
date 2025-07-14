@@ -18,30 +18,54 @@ export const loginBeautician = async (req, res) => {
   res.status(200).json({ token, beautician });
 };
 
-// ✅ Set Availability
-export const setAvailability = async (req, res) => {
-  const { date, timeSlots } = req.body;
-  const beautician = await Beautician.findById(req.user.id);
+// ✅ Set Weekly Availability (NEW)
+export const setWeeklyAvailability = async (req, res) => {
+  const { slots } = req.body; // [{ day, startTime, endTime, isAvailable }, ...]
 
-  if (!beautician) return res.status(404).json({ message: "Beautician not found" });
+  try {
+    const beautician = await Beautician.findById(req.user.id);
+    if (!beautician) return res.status(404).json({ message: "Beautician not found" });
 
-  beautician.availableSlots.push({ date, timeSlots });
-  await beautician.save();
+    beautician.availableSlots = slots;
+    await beautician.save();
 
-  res.status(200).json({ message: "Slots updated" });
+    res.status(200).json({ message: "Availability updated successfully", slots: beautician.availableSlots });
+  } catch (error) {
+    console.error("Error setting weekly availability:", error);
+    res.status(500).json({ message: "Failed to update availability" });
+  }
 };
-export const getMySlots = async (req, res) => {
-  const beautician = await Beautician.findById(req.user.id);
-  res.status(200).json(beautician.availableSlots);
+
+// ✅ Get Weekly Availability (NEW)
+export const getWeeklyAvailability = async (req, res) => {
+  try {
+    const beautician = await Beautician.findById(req.user.id);
+    if (!beautician) return res.status(404).json({ message: "Beautician not found" });
+
+    res.status(200).json({ slots: beautician.availableSlots });
+  } catch (error) {
+    console.error("Error getting availability:", error);
+    res.status(500).json({ message: "Failed to fetch availability" });
+  }
 };
+
 // ✅ Get Own Bookings
 export const getBeauticianBookings = async (req, res) => {
-  const bookings = await Booking.find({ beautician: req.user.id })
-    .populate("user services.service")
-    .sort({ createdAt: -1 });
+  try {
+    const bookings = await Booking.find({ beautician: req.beautician.id }) // 👈 correct field
+      .populate({ path: "user", select: "name phone" })
+                // 👈 get name/email
+      .populate({ path: "services.service", select: "name" })        // 👈 service details
+      .sort({ createdAt: -1 });
 
-  res.status(200).json(bookings);
+    res.status(200).json(bookings);
+  } catch (error) {
+    console.error("Error fetching beautician bookings:", error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
 };
+
+
 
 // ✅ Update Booking Status
 export const updateBookingStatus = async (req, res) => {
@@ -69,24 +93,4 @@ export const getEarnings = async (req, res) => {
 
   const total = bookings.reduce((sum, b) => sum + b.finalAmount, 0);
   res.status(200).json({ total });
-};
-export const addAvailableSlots = async (req, res) => {
-  try {
-    const { date, timeSlots } = req.body;
-    const beautician = req.beautician;
-
-    const existing = beautician.availableSlots.find(s => s.date === date);
-
-    if (existing) {
-      existing.timeSlots = Array.from(new Set([...existing.timeSlots, ...timeSlots]));
-    } else {
-      beautician.availableSlots.push({ date, timeSlots });
-    }
-
-    await beautician.save();
-    res.status(200).json({ message: "Slots updated", slots: beautician.availableSlots });
-  } catch (error) {
-    console.error("Add slot error:", error);
-    res.status(500).json({ message: "Failed to add slots" });
-  }
 };

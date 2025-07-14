@@ -7,12 +7,12 @@ function isValidPhone(value) {
   return phoneRegex.test(value);
 }
 
-const BASE_URL = "http://localhost:5000"; // ⚠️ Update this to production URL later
+const BASE_URL = "http://localhost:5000"; // change this in prod
 
 const OTPLogin = () => {
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
-  const [step, setStep] = useState(1); // 1: enter phone, 2: enter OTP
+  const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -38,9 +38,11 @@ const OTPLogin = () => {
       });
 
       const data = await res.json();
-      if (data.success) {
-        setStep(2);
-        setSuccess("OTP sent successfully!");
+      console.log("Send OTP response:", data);
+
+      if (res.ok) {
+        setSuccess(data.message || "OTP sent successfully!");
+        setOtpSent(true); // ✅ Show OTP input now
       } else {
         setError(data.message || "Failed to send OTP.");
       }
@@ -70,7 +72,9 @@ const OTPLogin = () => {
       });
 
       const data = await res.json();
-      if (data.success) {
+      console.log("Verify OTP response:", data);
+
+      if (data.token) {
         setSuccess("Login successful!");
         localStorage.setItem("token", data.token);
         setTimeout(() => navigate("/"), 1000);
@@ -86,33 +90,31 @@ const OTPLogin = () => {
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-[#E90000] to-[#FAA6FF]">
       <form
-        onSubmit={step === 1 ? handleSendOtp : handleVerifyOtp}
+        onSubmit={otpSent ? handleVerifyOtp : handleSendOtp}
         className="bg-white/95 px-8 py-10 rounded-2xl shadow-2xl min-w-[340px] max-w-[370px] w-full"
       >
         <h2 className="mb-6 text-center text-black font-extrabold text-2xl tracking-wide">
           Login with OTP
         </h2>
 
-        {step === 1 && (
-          <div className="mb-5">
-            <label htmlFor="phone" className="font-semibold text-black block mb-2">
-              Phone Number
-            </label>
-            <input
-              id="phone"
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-              placeholder="Enter 10-digit phone"
-              maxLength={10}
-              className="w-full px-4 py-3 mt-1 rounded-lg border-2 border-pink-200 text-black font-medium bg-pink-50 focus:border-pink-400 focus:outline-none transition"
-              disabled={loading}
-              required
-            />
-          </div>
-        )}
+        <div className="mb-5">
+          <label htmlFor="phone" className="font-semibold text-black block mb-2">
+            Phone Number
+          </label>
+          <input
+            id="phone"
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
+            placeholder="Enter 10-digit phone"
+            maxLength={10}
+            className="w-full px-4 py-3 mt-1 rounded-lg border-2 border-pink-200 text-black font-medium bg-pink-50 focus:border-pink-400 focus:outline-none transition"
+            disabled={loading || otpSent}
+            required
+          />
+        </div>
 
-        {step === 2 && (
+        {otpSent && (
           <div className="mb-5">
             <label htmlFor="otp" className="font-semibold text-black block mb-2">
               Enter OTP
@@ -141,16 +143,16 @@ const OTPLogin = () => {
         >
           {loading
             ? "Please wait..."
-            : step === 1
-            ? "Send OTP"
-            : "Verify OTP"}
+            : otpSent
+            ? "Verify OTP"
+            : "Send OTP"}
         </button>
 
-        {step === 2 && (
+        {otpSent && (
           <button
             type="button"
             onClick={() => {
-              setStep(1);
+              setOtpSent(false);
               setOtp("");
               setError("");
               setSuccess("");

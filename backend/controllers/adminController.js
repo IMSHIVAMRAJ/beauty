@@ -42,30 +42,15 @@ export const adminAddBeautician = async (req, res) => {
     res.status(500).json({ message: "Server error while creating beautician" });
   }
 };
-export const addBeauticianSlot = async (req, res) => {
+// ✅ Get all beauticians with their availability
+export const getAllBeauticianslot = async (req, res) => {
   try {
-    const beauticianId = req.params.id;
-    const { date, timeSlots } = req.body;
+    const beauticians = await Beautician.find({}, "name email phone availableSlots");
 
-    const beautician = await Beautician.findById(beauticianId);
-    if (!beautician) {
-      return res.status(404).json({ message: "Beautician not found" });
-    }
-
-    // Add slot (or merge if date already exists)
-    const existingDate = beautician.availableSlots.find(slot => slot.date === date);
-    if (existingDate) {
-      existingDate.timeSlots.push(...timeSlots);
-    } else {
-      beautician.availableSlots.push({ date, timeSlots });
-    }
-
-    await beautician.save();
-
-    res.status(200).json({ message: "Slot added successfully", slots: beautician.availableSlots });
+    res.status(200).json({ beauticians });
   } catch (err) {
-    console.error("Slot add error:", err);
-    res.status(500).json({ message: "Error adding slot" });
+    console.error("Failed to fetch beauticians:", err);
+    res.status(500).json({ message: "Server error" });
   }
 };
 export const getAllBeauticians = async (req, res) => {
@@ -157,4 +142,55 @@ export const toggleCouponStatus = async (req, res) => {
   coupon.isActive = !coupon.isActive;
   await coupon.save();
   res.status(200).json({ message: "Coupon status updated", coupon });
+};
+export const approveBookingAndAssignBeautician = async (req, res) => {
+  try {
+    const { beauticianId } = req.body;
+    const bookingId = req.params.id;
+
+    // Step 1: Find the booking
+    const booking = await Booking.findById(bookingId);
+    if (!booking) return res.status(404).json({ message: "Booking not found" });
+
+    // Step 2: Find the beautician
+    const beautician = await Beautician.findById(beauticianId);
+    if (!beautician) return res.status(404).json({ message: "Beautician not found" });
+
+    // Step 3: Assign and approve
+    booking.status = "approved";
+    booking.beautician = beauticianId;
+    await booking.save();
+
+    // Step 4: Re-fetch the updated booking with beautician populated
+    const updatedBooking = await Booking.findById(bookingId).populate("beautician", "name email phone");
+
+    res.status(200).json({
+      message: "Booking approved and beautician assigned",
+      booking: updatedBooking,
+    });
+  } catch (err) {
+    console.error("Admin assign error:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getAllBookings = async (req, res) => {
+  try {
+  const bookings = await Booking.find()
+  .populate("user", "name email phone")
+  .populate("beautician", "name email phone")
+  .populate({
+    path: "services.service",
+    model: "Service",
+    select: "name"
+  })
+  .sort({ createdAt: -1 });
+
+
+
+    res.status(200).json(bookings);
+  } catch (err) {
+    console.error("Get all bookings error:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };

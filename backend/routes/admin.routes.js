@@ -10,12 +10,15 @@ import {
   addCoupon,
   getCoupons,
   toggleCouponStatus,
-  addBeauticianSlot 
+  getAllBeauticianslot,
+  approveBookingAndAssignBeautician,
+  getAllBookings
 } from "../controllers/adminController.js";
 
 import { protect, adminOnly } from "../middlewares/authMiddleware.js";
 import { addService, approveService, deleteService, getAllServices } from "../controllers/serviceController.js";
 import { upload } from "../middlewares/multer.js";
+import { assignBeauticianToBooking } from "../controllers/bookingController.js";
 const router = express.Router();
 
 router.post(
@@ -25,12 +28,7 @@ router.post(
   upload.single("profileImage"),
   adminAddBeautician
 );
-router.post(
-  "/beautician/:id/slots",
-  protect,
-  adminOnly,
-  addBeauticianSlot
-);
+
 router.get("/beauticians", protect, adminOnly, getAllBeauticians);
 router.delete("/beautician/:id", protect, adminOnly, deleteBeautician);
 
@@ -56,4 +54,7 @@ router.post(
 router.get("/getservices", getAllServices);
 export default router;
 router.delete("/service/:id", protect, adminOnly, deleteService);
-
+router.put("/assign-beautician",  protect, adminOnly, assignBeauticianToBooking); 
+router.get("/beauticianslot", protect, adminOnly, getAllBeauticianslot);
+router.patch("/bookings/:id/assign", protect, adminOnly, approveBookingAndAssignBeautician);
+router.get("/allbookings", protect, adminOnly, getAllBookings);

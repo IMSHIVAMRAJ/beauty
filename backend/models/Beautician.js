@@ -13,12 +13,15 @@ const beauticianSchema = new mongoose.Schema({
 
   expertise: [String],
 
-  availableSlots: [
-    {
-      date: String,
-      timeSlots: [String],
-    },
-  ],
+ availableSlots: [
+  {
+    day: { type: String }, // e.g., 'Monday', 'Tuesday'
+    startTime: { type: String }, // e.g., "09:00 AM"
+    endTime: { type: String },   // e.g., "06:00 PM"
+    isAvailable: { type: Boolean, default: false },
+  },
+],
+
 
   earnings: {
     type: Number,

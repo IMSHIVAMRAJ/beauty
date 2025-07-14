@@ -41,6 +41,7 @@ export const protectBeautician = async (req, res, next) => {
     if (!beautician) return res.status(401).json({ message: "Not a beautician" });
 
     req.beautician = beautician;
+    req.user = beautician; 
     next();
   } catch (err) {
     res.status(401).json({ message: "Invalid or expired token" });

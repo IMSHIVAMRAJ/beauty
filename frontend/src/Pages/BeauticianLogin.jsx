@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const BeauticianLogin = () => {
-  const [identifier, setIdentifier] = useState(""); // phone or email
+  const [email, setEmail] = useState(""); // ✅ renamed from identifier
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -13,24 +14,35 @@ const BeauticianLogin = () => {
     e.preventDefault();
     setError("");
     setSuccess("");
-    if (!identifier || !password) {
-      setError("Please enter your phone/email and password.");
+
+    if (!email || !password) {
+      setError("Please enter your email and password.");
       return;
     }
+
     setLoading(true);
-    // Simulate login
-    setTimeout(() => {
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/beautician/login", {
+        email,
+        password,
+      });
+
+      const { token, beautician } = res.data;
+
+      localStorage.setItem("beauticianToken", token);
+      localStorage.setItem("beauticianData", JSON.stringify(beautician));
+
       setSuccess("Login successful!");
-      setLoading(false);
-      // Store beautician data in localStorage
-      localStorage.setItem('beauticianToken', 'mock-token');
-      localStorage.setItem('beauticianData', JSON.stringify({
-        id: 'beautician-1',
-        name: 'Beautician',
-        email: identifier
-      }));
       setTimeout(() => navigate("/beautician/dashboard"), 1000);
-    }, 1000);
+    } catch (err) {
+      console.error("Login Error:", err);
+      setError(
+        err.response?.data?.message || "Login failed. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,34 +54,42 @@ const BeauticianLogin = () => {
         <h2 className="mb-6 text-center text-black font-extrabold text-2xl tracking-wide">
           Beautician Login
         </h2>
+
         <div className="mb-5">
-          <label htmlFor="identifier" className="font-semibold text-black block mb-2">Phone or Email</label>
+          <label htmlFor="email" className="font-semibold text-black block mb-2">
+            Email
+          </label>
           <input
-            id="identifier"
-            type="text"
-            value={identifier}
-            onChange={e => setIdentifier(e.target.value)}
-            placeholder="Enter phone or email"
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter email"
             className="w-full px-4 py-3 mt-1 rounded-lg border-2 border-pink-200 text-black font-medium bg-pink-50 focus:border-pink-400 focus:outline-none transition"
             disabled={loading}
             required
           />
         </div>
+
         <div className="mb-5">
-          <label htmlFor="password" className="font-semibold text-black block mb-2">Password</label>
+          <label htmlFor="password" className="font-semibold text-black block mb-2">
+            Password
+          </label>
           <input
             id="password"
             type="password"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter password"
             className="w-full px-4 py-3 mt-1 rounded-lg border-2 border-pink-200 text-black font-medium bg-pink-50 focus:border-pink-400 focus:outline-none transition"
             disabled={loading}
             required
           />
         </div>
+
         {error && <div className="text-[#E90000] mb-3 font-medium">{error}</div>}
         {success && <div className="text-sky-400 mb-3 font-medium">{success}</div>}
+
         <button
           type="submit"
           className="w-full py-3 bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white rounded-lg font-bold text-lg mt-1 shadow-md tracking-wide transition disabled:opacity-70 disabled:cursor-not-allowed"
@@ -82,4 +102,4 @@ const BeauticianLogin = () => {
   );
 };
 
-export default BeauticianLogin; 
+export default BeauticianLogin;

@@ -4,6 +4,7 @@ import ServiceApproval from "./ServiceApproval";
 import LocationManagement from "./LocationManagement";
 import CouponManagement from "./CouponManagement";
 import BookingControl from "./BookingControl";
+import BeauticianSlots from "./BeauticianSlots";
 
 const sections = [
   { name: "Beautician Management" },
@@ -11,6 +12,8 @@ const sections = [
   { name: "Location Management" },
   { name: "Coupon Management" },
   { name: "Booking Control" },
+  { name: "Beautician Slots" },
+  
   { name: "Skin Problem" },
   { name: "Hair Problem" },
 ];
@@ -59,6 +62,9 @@ const AdminDashboard = () => {
           {active === "Location Management" && <LocationManagement />}
           {active === "Coupon Management" && <CouponManagement />}
           {active === "Booking Control" && <BookingControl />}
+          {active === "Beautician Slots" && <BeauticianSlots />}
+
+
           {active === "Skin Problem" && (
             <div className="w-full">
               <h3 className="text-xl font-bold mb-4">Skin Problem Submissions</h3>

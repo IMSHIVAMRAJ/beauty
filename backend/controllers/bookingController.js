@@ -13,7 +13,7 @@ export const createRazorpayOrder = async (req, res) => {
   const { amount } = req.body;
 
   const options = {
-    amount: amount * 100,
+    amount: amount * 100, // paise me
     currency: "INR",
     receipt: `receipt_order_${Math.random()}`,
   };
@@ -22,11 +22,12 @@ export const createRazorpayOrder = async (req, res) => {
     const order = await razorpay.orders.create(options);
     res.status(200).json(order);
   } catch (err) {
+    console.error("Razorpay order error:", err);
     res.status(500).json({ error: "Payment order failed" });
   }
 };
 
-// 2. Confirm Booking After Payment & Auto Assign Beautician
+// 2. Confirm Booking After Payment (No beautician assigned initially)
 export const confirmBooking = async (req, res) => {
   try {
     const {
@@ -42,7 +43,7 @@ export const confirmBooking = async (req, res) => {
       timeSlot,
     } = req.body;
 
-    // ✅ Step 1: Verify Signature
+    // Step 1: Verify Signature
     const generated_signature = crypto
       .createHmac("sha256", process.env.RAZORPAY_SECRET)
       .update(razorpay_order_id + "|" + razorpay_payment_id)
@@ -52,36 +53,10 @@ export const confirmBooking = async (req, res) => {
       return res.status(400).json({ message: "Payment verification failed" });
     }
 
-    // ✅ Step 2: Find Available Beautician
-    const beauticians = await Beautician.find({
-      availableSlots: {
-        $elemMatch: {
-          date,
-          timeSlots: timeSlot,
-        },
-      },
-    });
-
-    if (!beauticians.length) {
-      return res
-        .status(400)
-        .json({ message: "No beautician available at this slot" });
-    }
-
-    const assignedBeautician = beauticians[0];
-
-    // ✅ Step 3: Remove slot from beautician
-    const slotObj = assignedBeautician.availableSlots.find(
-      (s) => s.date === date
-    );
-    slotObj.timeSlots = slotObj.timeSlots.filter((t) => t !== timeSlot);
-
-    await assignedBeautician.save();
-
-    // ✅ Step 4: Create Booking
+    // Step 2: Create Booking in "pending" status
     const booking = await Booking.create({
-      user: req.user.id,
-      beautician: assignedBeautician._id,
+      user: req.user.id, // login middleware se user milta hai
+      beautician: null, // assigned later by admin
       services,
       totalAmount,
       discount,
@@ -89,6 +64,7 @@ export const confirmBooking = async (req, res) => {
       address,
       date,
       timeSlot,
+      status: "pending",
       paymentStatus: "paid",
       razorpay: {
         orderId: razorpay_order_id,
@@ -97,32 +73,57 @@ export const confirmBooking = async (req, res) => {
     });
 
     res.status(201).json({
-      message: "Booking Confirmed",
+      message: "Booking created in pending state",
       booking,
-      assignedBeautician: assignedBeautician.name,
     });
   } catch (error) {
     console.error("Booking error:", error);
-    res
-      .status(500)
-      .json({ message: "Something went wrong", error: error.message });
+    res.status(500).json({ message: "Something went wrong", error: error.message });
   }
 };
 
-// 3. Get user bookings
+// 3. Get User Bookings
 export const getUserBookings = async (req, res) => {
-  const bookings = await Booking.find({ user: req.user.id })
-    .populate("services.service")
-    .populate("beautician", "name email");
-  res.status(200).json(bookings);
+  try {
+    const bookings = await Booking.find({ user: req.user.id })
+      .populate("services.service")
+      .populate("beautician", "name email");
+    res.status(200).json(bookings);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch bookings" });
+  }
 };
 
-// 4. Cancel booking
+// 4. Cancel Booking
 export const cancelBooking = async (req, res) => {
-  const booking = await Booking.findByIdAndUpdate(
-    req.params.id,
-    { status: "cancelled" },
-    { new: true }
-  );
-  res.status(200).json(booking);
+  try {
+    const booking = await Booking.findByIdAndUpdate(
+      req.params.id,
+      { status: "cancelled" },
+      { new: true }
+    );
+    res.status(200).json(booking);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to cancel booking" });
+  }
+};
+
+// 5. Admin Assign Beautician to Pending Booking
+export const assignBeauticianToBooking = async (req, res) => {
+  const { bookingId, beauticianId } = req.body;
+
+  try {
+    const booking = await Booking.findById(bookingId);
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    booking.beautician = beauticianId;
+    booking.status = "confirmed";
+    await booking.save();
+
+    res.status(200).json({ message: "Beautician assigned successfully", booking });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to assign beautician", error: error.message });
+  }
 };
