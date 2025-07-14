@@ -18,22 +18,6 @@ const BeauticianSidebar = ({ activeTab, setActiveTab, setSidebarOpen, handleLogo
           <li>
             <button
               onClick={() => {
-                setActiveTab('dashboard');
-                setSidebarOpen(false);
-              }}
-              className={`w-full flex items-center px-4 py-3 rounded-lg text-left transition ${
-                activeTab === 'dashboard'
-                  ? 'bg-pink-100 text-pink-700 font-medium'
-                  : 'text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <Calendar className="w-5 h-5 mr-3" />
-              Dashboard
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => {
                 setActiveTab('availability');
                 setSidebarOpen(false);
               }}

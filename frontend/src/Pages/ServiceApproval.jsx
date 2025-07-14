@@ -185,12 +185,26 @@ const ServiceApproval = () => {
 
       {/* Add Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex justify-center items-center">
+        <div className="fixed inset-0 z-50 flex justify-center items-center">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setShowAddModal(false)}
+            aria-label="Close modal overlay"
+          />
           <form
             onSubmit={handleFormSubmit}
-            className="bg-white p-6 rounded-xl shadow-lg w-full max-w-lg"
+            className="bg-white p-6 rounded-xl shadow-lg w-full max-w-lg max-h-[80vh] overflow-y-auto relative"
             encType="multipart/form-data"
+            onClick={e => e.stopPropagation()}
           >
+            <button
+              type="button"
+              className="absolute top-3 right-4 w-8 h-8 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center text-gray-600 hover:text-pink-600 hover:border-pink-400 text-xl font-bold transition-colors"
+              onClick={() => setShowAddModal(false)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
             <h3 className="text-lg font-bold mb-4 text-black">Add New Service</h3>
 
             {["name", "category", "subcategory", "price", "discount"].map((field) => (
@@ -220,37 +234,55 @@ const ServiceApproval = () => {
 
             <div className="mb-3">
               <label className="block mb-1 font-medium">Main Image</label>
-              <input
-                type="file"
-                name="mainImage"
-                onChange={handleFileChange}
-                accept="image/*"
-                className="w-full"
-                required
-              />
+              <label className="inline-block cursor-pointer bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-md font-medium transition mr-2">
+                Choose File
+                <input
+                  type="file"
+                  name="mainImage"
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  className="hidden"
+                  required
+                />
+              </label>
+              {form.mainImage && (
+                <span className="text-sm text-gray-700">{form.mainImage.name}</span>
+              )}
             </div>
 
             <div className="mb-3">
               <label className="block mb-1 font-medium">Sub Images</label>
-              <input
-                type="file"
-                name="subImages"
-                onChange={handleFileChange}
-                multiple
-                accept="image/*"
-                className="w-full"
-              />
+              <label className="inline-block cursor-pointer bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-md font-medium transition mr-2">
+                Choose Files
+                <input
+                  type="file"
+                  name="subImages"
+                  onChange={handleFileChange}
+                  multiple
+                  accept="image/*"
+                  className="hidden"
+                />
+              </label>
+              {form.subImages && form.subImages.length > 0 && (
+                <span className="text-sm text-gray-700">{form.subImages.map(f => f.name).join(', ')}</span>
+              )}
             </div>
 
             <div className="mb-4">
               <label className="block mb-1 font-medium">Category Image (Optional)</label>
-              <input
-                type="file"
-                name="categoryImage"
-                onChange={handleFileChange}
-                accept="image/*"
-                className="w-full"
-              />
+              <label className="inline-block cursor-pointer bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-md font-medium transition mr-2">
+                Choose File
+                <input
+                  type="file"
+                  name="categoryImage"
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  className="hidden"
+                />
+              </label>
+              {form.categoryImage && (
+                <span className="text-sm text-gray-700">{form.categoryImage.name}</span>
+              )}
             </div>
 
             <div className="flex justify-end gap-3">

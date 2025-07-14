@@ -6,7 +6,7 @@ import BeauticianBookings from './BeauticianBookings';
 import BeauticianSidebar from '../Components/BeauticianSidebar';
 
 const BeauticianDashboard = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState('availability');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -24,84 +24,7 @@ const BeauticianDashboard = () => {
       case 'bookings':
         return <BeauticianBookings />;
       default:
-        return (
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">Beautician Dashboard</h1>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Total Bookings</p>
-                    <p className="text-2xl font-bold text-gray-900">24</p>
-                  </div>
-                  <div className="p-3 bg-blue-100 rounded-full">
-                    <Calendar className="w-6 h-6 text-blue-600" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Today's Appointments</p>
-                    <p className="text-2xl font-bold text-gray-900">5</p>
-                  </div>
-                  <div className="p-3 bg-green-100 rounded-full">
-                    <Clock className="w-6 h-6 text-green-600" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Total Earnings</p>
-                    <p className="text-2xl font-bold text-gray-900">₹12,450</p>
-                  </div>
-                  <div className="p-3 bg-purple-100 rounded-full">
-                    <Users className="w-6 h-6 text-purple-600" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Recent Activity</h2>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div>
-                    <p className="font-medium text-gray-800">Bridal Makeup - Priya Sharma</p>
-                    <p className="text-sm text-gray-600">Today, 2:00 PM</p>
-                  </div>
-                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                    Confirmed
-                  </span>
-                </div>
-                
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div>
-                    <p className="font-medium text-gray-800">Hair Styling - Anjali Patel</p>
-                    <p className="text-sm text-gray-600">Tomorrow, 10:00 AM</p>
-                  </div>
-                  <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
-                    Pending
-                  </span>
-                </div>
-                
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div>
-                    <p className="font-medium text-gray-800">Facial Treatment - Meera Singh</p>
-                    <p className="text-sm text-gray-600">Yesterday, 4:30 PM</p>
-                  </div>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                    Completed
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
+        return null;
     }
   };
 

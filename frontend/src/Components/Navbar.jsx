@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MapPin, ChevronDown, User2, ShoppingCart, Home, Stethoscope, CalendarCheck2, Share2, Search } from 'lucide-react';
+import { MapPin, ChevronDown, User2, ShoppingCart, Home, Stethoscope, CalendarCheck2, Share2, Search, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCart } from './CartContext';
 
@@ -99,6 +99,32 @@ const Navbar = () => {
     setLocationDropdown(false);
   };
 
+  const [profileDropdown, setProfileDropdown] = useState(false);
+  const profileRef = useRef(null);
+
+  // Close profile dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setProfileDropdown(false);
+      }
+    }
+    if (profileDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [profileDropdown]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.reload(); // or use navigate('/login') if using react-router
+  };
+
+  // Check if user is authenticated
+  const isLoggedIn = Boolean(localStorage.getItem('token'));
+
   return (
     <header className="w-full bg-white shadow-md px-2 sm:px-4 py-3 sm:py-5 sticky top-0 z-20">
       <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-4 w-full">
@@ -192,9 +218,42 @@ const Navbar = () => {
         <div className="hidden sm:flex flex-1" />
         {/* User & Cart Icons */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-max">
-          <Link to="/profile" className="p-2 rounded-full hover:bg-gray-100 transition">
-            <User2 className="w-6 h-6 text-gray-600 hover:scale-110 transition-transform" />
-          </Link>
+          {isLoggedIn ? (
+            <div className="relative" ref={profileRef}>
+              <button
+                className="p-2 rounded-full hover:bg-gray-100 transition"
+                onClick={() => setProfileDropdown((v) => !v)}
+                type="button"
+              >
+                <User2 className="w-6 h-6 text-gray-600 hover:scale-110 transition-transform" />
+              </button>
+              {profileDropdown && (
+                <div className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-gray-100 z-40 p-2">
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 font-semibold hover:bg-pink-50 transition"
+                    onClick={() => setProfileDropdown(false)}
+                  >
+                    <User2 className="w-4 h-4" /> My Profile
+                  </Link>
+                  <button
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-red-600 font-semibold hover:bg-red-50 transition mt-1"
+                    onClick={handleLogout}
+                    type="button"
+                  >
+                    <LogOut className="w-4 h-4" /> Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              to="/otp-login"
+              className="px-4 py-2 rounded-full bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white font-bold shadow hover:from-pink-700 hover:to-pink-400 transition"
+            >
+              Login
+            </Link>
+          )}
           <Link to="/cart" className="relative p-2 rounded-full hover:bg-gray-100 transition">
             <ShoppingCart className="w-6 h-6 text-gray-600 hover:scale-110 transition-transform" />
             {cartCount > 0 && (

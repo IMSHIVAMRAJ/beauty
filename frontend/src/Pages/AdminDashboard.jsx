@@ -5,6 +5,8 @@ import LocationManagement from "./LocationManagement";
 import CouponManagement from "./CouponManagement";
 import BookingControl from "./BookingControl";
 import BeauticianSlots from "./BeauticianSlots";
+import { LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const sections = [
   { name: "Beautician Management" },
@@ -32,13 +34,19 @@ const mockHairProblems = [
 
 const AdminDashboard = () => {
   const [active, setActive] = useState(sections[0].name);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('adminToken');
+    navigate('/admin/login');
+  };
 
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-[#E90000] to-[#FAA6FF]">
       {/* Sidebar */}
       <aside className="w-64 bg-white/90 shadow-lg flex flex-col py-8 px-4 min-h-screen">
         <h2 className="text-2xl font-extrabold text-black mb-8 text-center">Admin Dashboard</h2>
-        <nav className="flex flex-col gap-2">
+        <nav className="flex flex-col gap-2 flex-1">
           {sections.map((section) => (
             <button
               key={section.name}
@@ -53,6 +61,12 @@ const AdminDashboard = () => {
             </button>
           ))}
         </nav>
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-2 px-4 py-3 rounded-lg text-left text-red-600 font-semibold hover:bg-red-50 transition mt-8"
+        >
+          <LogOut className="w-5 h-5 mr-2" /> Logout
+        </button>
       </aside>
       {/* Main Content */}
       <main className="flex-1 flex flex-col items-start p-8">

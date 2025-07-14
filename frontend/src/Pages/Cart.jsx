@@ -153,14 +153,14 @@ const Cart = () => {
   }, []);
 
   return (
-    <div className="cart-page bg-gray-100 min-h-screen py-4 sm:py-8">
-      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-4 sm:gap-8 px-2 sm:px-4">
-        <section className="flex-1 bg-white rounded-xl shadow-lg p-3 sm:p-6 md:p-8">
-          <h1 className="text-2xl font-bold mb-4">Service Cart</h1>
+    <div className="cart-page min-h-screen py-4 sm:py-8 bg-gradient-to-br from-pink-100 via-[#FAA6FF] to-[#E90000]">
+      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-start gap-4 sm:gap-8 px-2 sm:px-4">
+        <section className="flex-1 bg-gradient-to-br from-white via-pink-50 to-pink-100 rounded-2xl shadow-2xl p-3 sm:p-6 md:p-8 border border-pink-200">
+          <h1 className="text-2xl font-bold mb-4 text-pink-700">Service Cart</h1>
           <div className="flex items-center mb-4 text-pink-600 font-semibold cursor-pointer">
             <input
               type="checkbox"
-              className="mr-2"
+              className="mr-2 accent-pink-500 w-5 h-5"
               checked={allSelected}
               onChange={toggleSelectAll}
             />
@@ -169,37 +169,42 @@ const Cart = () => {
           {selected.length > 0 && (
             <button
               onClick={removeSelected}
-              className="mb-4 bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded"
+              className="mb-4 bg-gradient-to-r from-[#E90000] to-[#FAA6FF] hover:from-pink-700 hover:to-pink-400 text-white py-2 px-4 rounded-full font-bold shadow"
             >
               Remove Selected
             </button>
           )}
-          <hr className="mb-4" />
+          <hr className="mb-4 border-pink-200" />
           {cart.length === 0 ? (
             <div className="text-center text-gray-500">Your cart is empty.</div>
           ) : (
             cart.map((service) => (
-              <div key={service.id} className="mb-4 border p-4 rounded shadow">
+              <div key={service.id} className="mb-4 bg-gradient-to-r from-pink-50 via-white to-pink-100 border-2 border-pink-200 p-4 rounded-2xl shadow-lg flex items-center gap-4">
                 <input
                   type="checkbox"
                   checked={selected.includes(service.id)}
                   onChange={() => toggleSelect(service.id)}
+                  className="accent-pink-500 w-5 h-5"
                 />
-                <div>
-                  {service.name} - ₹{service.price}
+                <div className="flex-1">
+                  <span className="font-bold text-pink-700 text-lg">{service.name}</span>
+                  <span className="ml-2 text-gray-700 font-semibold">₹{service.price}</span>
                 </div>
+                {selected.includes(service.id) && (
+                  <span className="inline-block bg-gradient-to-r from-pink-400 to-pink-600 text-white text-xs px-3 py-1 rounded-full font-bold shadow">Selected</span>
+                )}
               </div>
             ))
           )}
         </section>
 
-        <aside className="w-full lg:w-80 bg-white rounded-xl shadow-lg p-6">
-          <div className="mt-8 flex flex-col items-center">
-            <div className="text-lg font-bold mb-4">Total: ₹{total}</div>
+        <aside className="w-full lg:w-80 bg-gradient-to-br from-pink-200 via-white to-pink-100 rounded-2xl shadow-2xl p-6 border border-pink-200 flex flex-col items-center min-h-[220px] justify-center">
+          <div className="mt-8 w-full flex flex-col items-center">
+            <div className="text-lg font-bold mb-4 text-pink-700">Total: <span className="text-2xl">₹{total}</span></div>
             <button
               onClick={handlePayNow}
               disabled={loading || paymentSuccess}
-              className="w-full py-3 bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white rounded-lg font-bold text-lg"
+              className="w-full py-3 bg-gradient-to-r from-[#E90000] via-[#FAA6FF] to-pink-400 text-white rounded-full font-bold text-lg shadow-lg hover:from-pink-700 hover:to-pink-400 transition"
             >
               {loading
                 ? "Processing..."
@@ -217,14 +222,14 @@ const Cart = () => {
       </div>
 
       {cart.length > 0 && (
-        <div className="max-w-6xl mx-auto mt-6 bg-white rounded-xl shadow-lg p-4 flex flex-col gap-4">
+        <div className="max-w-6xl mx-auto mt-6 bg-gradient-to-br from-pink-50 via-white to-pink-100 rounded-2xl shadow-2xl p-6 flex flex-col gap-4 border border-pink-200">
           <label className="font-semibold text-gray-700">Address</label>
           <input
             type="text"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             placeholder="Enter delivery address"
-            className="border rounded px-4 py-2 w-full"
+            className="border-2 border-pink-200 rounded px-4 py-2 w-full bg-white focus:border-pink-400 focus:ring-2 focus:ring-pink-100"
           />
 
           <label className="font-semibold text-gray-700">Date</label>
@@ -232,7 +237,7 @@ const Cart = () => {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="border rounded px-4 py-2 w-full max-w-xs"
+            className="border-2 border-pink-200 rounded px-4 py-2 w-full max-w-xs bg-white focus:border-pink-400 focus:ring-2 focus:ring-pink-100"
           />
 
           <label className="font-semibold text-gray-700">Time</label>
@@ -240,17 +245,17 @@ const Cart = () => {
             type="time"
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            className="border rounded px-4 py-2 w-full max-w-xs"
+            className="border-2 border-pink-200 rounded px-4 py-2 w-full max-w-xs bg-white focus:border-pink-400 focus:ring-2 focus:ring-pink-100"
           />
         </div>
       )}
 
       {/* Booking List */}
       {bookings.length > 0 && (
-        <div className="max-w-6xl mx-auto mt-10 bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-bold mb-4">Your Bookings</h2>
+        <div className="max-w-6xl mx-auto mt-10 bg-gradient-to-br from-pink-50 via-white to-pink-100 rounded-2xl shadow-2xl p-6 border border-pink-200">
+          <h2 className="text-xl font-bold mb-4 text-pink-700">Your Bookings</h2>
           {bookings.map((booking) => (
-            <div key={booking._id} className="border rounded p-4 mb-4 shadow">
+            <div key={booking._id} className="bg-gradient-to-r from-white via-pink-50 to-pink-100 border-2 border-pink-200 rounded-2xl p-4 mb-4 shadow flex flex-col gap-2">
               <div>
                 <strong>Order ID:</strong> {booking.razorpay?.orderId || "N/A"}
               </div>
@@ -260,17 +265,15 @@ const Cart = () => {
               </div>
               <div>
                 <strong>Status:</strong>{" "}
-                <span
-                  className={`font-semibold ${
-                    booking.status === "pending"
-                      ? "text-yellow-500"
-                      : booking.status === "accepted"
-                      ? "text-blue-500"
-                      : booking.status === "completed"
-                      ? "text-green-600"
-                      : "text-gray-500"
-                  }`}
-                >
+                <span className={`font-semibold px-3 py-1 rounded-full shadow text-white bg-gradient-to-r ${
+                  booking.status === "pending"
+                    ? "from-yellow-400 to-yellow-600"
+                    : booking.status === "accepted"
+                    ? "from-blue-400 to-blue-600"
+                    : booking.status === "completed"
+                    ? "from-green-400 to-green-600"
+                    : "from-gray-400 to-gray-600"
+                }`}>
                   {booking.status}
                 </span>
               </div>
