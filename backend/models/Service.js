@@ -11,6 +11,9 @@ const serviceSchema = new mongoose.Schema({
   discount: Number,
   finalPrice: Number,
   descriptionPoints: [String],
+  precautionsAndAftercare: [String],
+  ingredients: [String],
+
   isApproved: {
   type: Boolean,
   default: false

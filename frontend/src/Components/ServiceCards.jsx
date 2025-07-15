@@ -42,12 +42,10 @@ const ServiceCards = ({ services = [] }) => {
               <div className="flex items-center gap-2 my-2">
                 <p className="text-gray-400 line-through">₹{service.price}</p>
                 <p className="font-bold text-pink-600">₹{service.finalPrice}</p>
-                <p className="text-green-600 font-semibold">{service.discount}</p>
+                <p className="text-green-600 font-semibold">{service.discount}% OFF</p>
               </div>
               <div className="flex justify-between items-center mt-3">
-                <span className="text-sm font-bold text-gray-700 hover:underline">
-                  VIEW DETAILS
-                </span>
+                <span className="text-sm font-bold text-gray-700 hover:underline">VIEW DETAILS</span>
                 <Share2 className="w-5 h-5 text-gray-500" />
               </div>
               <button
@@ -61,7 +59,7 @@ const ServiceCards = ({ services = [] }) => {
                     originalPrice: service.price,
                     discount: service.discount,
                     description: service.description,
-                    image: service.mainImage
+                    image: service.mainImage,
                   });
                 }}
               >
@@ -89,18 +87,52 @@ const ServiceCards = ({ services = [] }) => {
               className="w-full h-48 object-cover rounded-lg mb-4"
               onError={(e) => (e.target.src = 'https://via.placeholder.com/300')}
             />
-
             <h2 className="text-xl font-bold">{selectedService.name}</h2>
 
-            <p className="text-sm text-gray-600 mt-2">
-              {selectedService.descriptionPoints?.[0] || selectedService.description || 'No description'}
-            </p>
+            {/* Description Points */}
+            {selectedService.descriptionPoints?.length > 0 ? (
+              <div className="mt-3">
+                <h3 className="font-semibold text-gray-800 mb-1">Description</h3>
+                <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                  {selectedService.descriptionPoints.map((point, idx) => (
+                    <li key={idx}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-600 mt-2">No description available</p>
+            )}
 
+            {/* Price and Discount */}
             <div className="mt-4 flex items-center gap-3">
               <p className="text-lg font-bold text-pink-600">₹{selectedService.finalPrice}</p>
               <p className="text-gray-500 line-through">₹{selectedService.price}</p>
-              <p className="text-green-600 font-semibold">{selectedService.discount}</p>
+              <p className="text-green-600 font-semibold">{selectedService.discount}%</p>
             </div>
+
+            {/* Precautions & Aftercare */}
+            {selectedService.precautionsAndAftercare?.length > 0 && (
+              <div className="mt-4">
+                <h3 className="font-semibold text-gray-800 mb-1">Precautions & Aftercare</h3>
+                <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                  {selectedService.precautionsAndAftercare.map((point, idx) => (
+                    <li key={idx}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Ingredients */}
+            {selectedService.ingredients?.length > 0 && (
+              <div className="mt-4">
+                <h3 className="font-semibold text-gray-800 mb-1">Ingredients</h3>
+                <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                  {selectedService.ingredients.map((item, idx) => (
+                    <li key={idx}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             <div className="flex w-full gap-3 mt-6">
               <button
@@ -113,7 +145,7 @@ const ServiceCards = ({ services = [] }) => {
                     originalPrice: selectedService.price,
                     discount: selectedService.discount,
                     description: selectedService.description,
-                    image: selectedService.mainImage
+                    image: selectedService.mainImage,
                   });
                   handleCloseModal();
                 }}

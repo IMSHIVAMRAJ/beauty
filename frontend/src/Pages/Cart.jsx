@@ -12,7 +12,8 @@ const Cart = () => {
   const [address, setAddress] = useState("");
   const [bookings, setBookings] = useState([]);
 
-  const total = cart.reduce((sum, item) => sum + (item.price || 0), 0);
+  // Use finalPrice if available, else price, else 0
+  const total = cart.reduce((sum, item) => sum + (item.finalPrice || item.price || 0), 0);
   const allSelected = cart.length > 0 && selected.length === cart.length;
 
   const toggleSelectAll = () => {
@@ -43,7 +44,6 @@ const Cart = () => {
   };
 
   const handlePayNow = async () => {
-    console.log("Cart content at payment time:", cart);
     if (!date || !time || !address) {
       alert("Please fill in address, date, and time.");
       return;
@@ -86,7 +86,7 @@ const Cart = () => {
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
                 services: cart.map((item) => ({
-                  service:  item._id || item.id,
+                  service: item._id || item.id,
                   quantity: 1,
                 })),
                 totalAmount: total,
@@ -106,7 +106,7 @@ const Cart = () => {
             setPaymentSuccess(true);
             alert("Booking Successful!");
             removeSelected();
-            fetchBookings(); // reload booking data
+            fetchBookings();
           } catch (err) {
             console.error("Booking failed", err);
             alert("Booking failed");
@@ -126,7 +126,7 @@ const Cart = () => {
       rzp.open();
     } catch (error) {
       console.error("Payment error", error);
-      alert("Payment failed");
+      alert("Payment failed. Have you logged in?");
     }
 
     setLoading(false);
@@ -155,8 +155,9 @@ const Cart = () => {
   return (
     <div className="cart-page min-h-screen py-4 sm:py-8 bg-gradient-to-br from-pink-100 via-[#FAA6FF] to-[#E90000]">
       <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-start gap-4 sm:gap-8 px-2 sm:px-4">
-        <section className="flex-1 bg-gradient-to-br from-white via-pink-50 to-pink-100 rounded-2xl shadow-2xl p-3 sm:p-6 md:p-8 border border-pink-200">
+        <section className="flex-1 bg-white rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 border border-pink-200">
           <h1 className="text-2xl font-bold mb-4 text-pink-700">Service Cart</h1>
+
           <div className="flex items-center mb-4 text-pink-600 font-semibold cursor-pointer">
             <input
               type="checkbox"
@@ -166,6 +167,7 @@ const Cart = () => {
             />
             {allSelected ? "Deselect all" : "Select all"}
           </div>
+
           {selected.length > 0 && (
             <button
               onClick={removeSelected}
@@ -174,24 +176,49 @@ const Cart = () => {
               Remove Selected
             </button>
           )}
+
           <hr className="mb-4 border-pink-200" />
+
           {cart.length === 0 ? (
             <div className="text-center text-gray-500">Your cart is empty.</div>
           ) : (
             cart.map((service) => (
-              <div key={service.id} className="mb-4 bg-gradient-to-r from-pink-50 via-white to-pink-100 border-2 border-pink-200 p-4 rounded-2xl shadow-lg flex items-center gap-4">
+              <div
+                key={service.id}
+                className="mb-4 w-full bg-white border border-pink-200 rounded-2xl shadow-lg p-4 flex flex-col sm:flex-row items-center gap-4"
+              >
                 <input
                   type="checkbox"
                   checked={selected.includes(service.id)}
                   onChange={() => toggleSelect(service.id)}
-                  className="accent-pink-500 w-5 h-5"
+                  className="accent-pink-500 w-5 h-5 self-start"
                 />
-                <div className="flex-1">
-                  <span className="font-bold text-pink-700 text-lg">{service.name}</span>
-                  <span className="ml-2 text-gray-700 font-semibold">₹{service.price}</span>
+                {service.image && (
+                  <img
+                    src={service.image}
+                    alt={service.name}
+                    className="w-24 h-24 object-cover rounded-lg border border-pink-200"
+                  />
+                )}
+                <div className="flex-1 text-left">
+                  <h2 className="text-lg font-bold text-pink-700">{service.name}</h2>
+                  <div className="mt-1 text-sm text-gray-700">
+                    <p>
+                      <span className="font-semibold">Price:</span> ₹{service.originalPrice}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Discount:</span>{" "}
+                      {service.discount ? `${service.discount}%` : "No discount"}
+                    </p>
+                    <p>
+                      <span className="font-semibold ">Final Price:</span> ₹{service.finalPrice || service.price}
+                    </p>
+                  </div>
                 </div>
                 {selected.includes(service.id) && (
-                  <span className="inline-block bg-gradient-to-r from-pink-400 to-pink-600 text-white text-xs px-3 py-1 rounded-full font-bold shadow">Selected</span>
+                  <span className="inline-block bg-gradient-to-r from-pink-400 to-pink-600 text-white text-xs px-3 py-1 rounded-full font-bold shadow">
+                    Selected
+                  </span>
                 )}
               </div>
             ))
@@ -200,7 +227,9 @@ const Cart = () => {
 
         <aside className="w-full lg:w-80 bg-gradient-to-br from-pink-200 via-white to-pink-100 rounded-2xl shadow-2xl p-6 border border-pink-200 flex flex-col items-center min-h-[220px] justify-center">
           <div className="mt-8 w-full flex flex-col items-center">
-            <div className="text-lg font-bold mb-4 text-pink-700">Total: <span className="text-2xl">₹{total}</span></div>
+            <div className="text-lg font-bold mb-4 text-pink-700">
+              Total: <span className="text-2xl">₹{total}</span>
+            </div>
             <button
               onClick={handlePayNow}
               disabled={loading || paymentSuccess}
@@ -221,8 +250,9 @@ const Cart = () => {
         </aside>
       </div>
 
+      {/* Inputs for booking */}
       {cart.length > 0 && (
-        <div className="max-w-6xl mx-auto mt-6 bg-gradient-to-br from-pink-50 via-white to-pink-100 rounded-2xl shadow-2xl p-6 flex flex-col gap-4 border border-pink-200">
+        <div className="max-w-6xl mx-auto mt-6 bg-white rounded-2xl shadow-2xl p-6 flex flex-col gap-4 border border-pink-200">
           <label className="font-semibold text-gray-700">Address</label>
           <input
             type="text"
@@ -250,19 +280,17 @@ const Cart = () => {
         </div>
       )}
 
-      {/* Booking List */}
+      {/* Booking History */}
       {bookings.length > 0 && (
-        <div className="max-w-6xl mx-auto mt-10 bg-gradient-to-br from-pink-50 via-white to-pink-100 rounded-2xl shadow-2xl p-6 border border-pink-200">
+        <div className="max-w-6xl mx-auto mt-10 bg-white rounded-2xl shadow-2xl p-6 border border-pink-200">
           <h2 className="text-xl font-bold mb-4 text-pink-700">Your Bookings</h2>
           {bookings.map((booking) => (
-            <div key={booking._id} className="bg-gradient-to-r from-white via-pink-50 to-pink-100 border-2 border-pink-200 rounded-2xl p-4 mb-4 shadow flex flex-col gap-2">
-              <div>
-                <strong>Order ID:</strong> {booking.razorpay?.orderId || "N/A"}
-              </div>
-              <div>
-                <strong>Payment ID:</strong>{" "}
-                {booking.razorpay?.paymentId || "N/A"}
-              </div>
+            <div
+              key={booking._id}
+              className="bg-gradient-to-r from-white via-pink-50 to-pink-100 border-2 border-pink-200 rounded-2xl p-4 mb-4 shadow flex flex-col gap-2"
+            >
+              <div><strong>Order ID:</strong> {booking.razorpay?.orderId || "N/A"}</div>
+              <div><strong>Payment ID:</strong> {booking.razorpay?.paymentId || "N/A"}</div>
               <div>
                 <strong>Status:</strong>{" "}
                 <span className={`font-semibold px-3 py-1 rounded-full shadow text-white bg-gradient-to-r ${
@@ -277,19 +305,10 @@ const Cart = () => {
                   {booking.status}
                 </span>
               </div>
-              <div>
-                <strong>Total:</strong> ₹{booking.totalAmount}
-              </div>
-              <div>
-                <strong>Date:</strong>{" "}
-                {new Date(booking.date).toLocaleDateString()}
-              </div>
-              <div>
-                <strong>Time Slot:</strong> {booking.timeSlot}
-              </div>
-              <div>
-                <strong>Address:</strong> {booking.address}
-              </div>
+              <div><strong>Total:</strong> ₹{booking.totalAmount}</div>
+              <div><strong>Date:</strong> {new Date(booking.date).toLocaleDateString()}</div>
+              <div><strong>Time Slot:</strong> {booking.timeSlot}</div>
+              <div><strong>Address:</strong> {booking.address}</div>
               <div>
                 <strong>Services:</strong>
                 <ul className="list-disc list-inside">

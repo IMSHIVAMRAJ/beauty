@@ -18,7 +18,8 @@ import MakeupAtHome from './Pages/MakeupAtHome';
 import PreBridal from './Pages/PreBridal';
 import HairStudio from './Pages/HairStudio';
 import MakeYourPackage from './Pages/MakeYourPackage';
-
+import AdminPrivateRoute from './utils/AdminPrivateRoute';
+import BeauticianPrivateRoute from './utils/BeauticianPrivateRoute';
 const App = () => {
   return (
     <>
@@ -38,9 +39,21 @@ const App = () => {
           <Route path='/hair-studio' element={<HairStudio />} />
           <Route path='/make-your-package' element={<MakeYourPackage />} />
           <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+           <Route path="/admin/dashboard" element={
+          <AdminPrivateRoute>
+            <AdminDashboard />
+          </AdminPrivateRoute>
+        }
+      />
           <Route path="/beautician/login" element={<BeauticianLogin />} />
-          <Route path="/beautician/dashboard" element={<BeauticianDashboard />} />
+         <Route
+        path="/beautician/dashboard"
+        element={
+          <BeauticianPrivateRoute>
+            <BeauticianDashboard />
+          </BeauticianPrivateRoute>
+        }
+      />
         </Routes>
       </div>
       <Footer />

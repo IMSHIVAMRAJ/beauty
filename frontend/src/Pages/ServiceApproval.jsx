@@ -11,9 +11,11 @@ const ServiceApproval = () => {
     price: '',
     discount: '',
     descriptionPoints: '',
+    precautionsAndAftercare: '',
+    ingredients: '',
     mainImage: null,
     subImages: [],
-    categoryImage: null, // ✅ Added
+    categoryImage: null,
   });
 
   useEffect(() => {
@@ -26,7 +28,6 @@ const ServiceApproval = () => {
       const res = await axios.get("http://localhost:5000/api/admin/getservices", {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       const fetched = res.data.services || res.data;
       setServices(fetched);
     } catch (err) {
@@ -92,10 +93,12 @@ const ServiceApproval = () => {
     formData.append("price", form.price);
     formData.append("discount", form.discount);
     formData.append("descriptionPoints", JSON.stringify(form.descriptionPoints.split(",")));
+    formData.append("precautionsAndAftercare", JSON.stringify(form.precautionsAndAftercare.split(",")));
+    formData.append("ingredients", JSON.stringify(form.ingredients.split(",")));
     formData.append("mainImage", form.mainImage);
     form.subImages.forEach(file => formData.append("subImages", file));
     if (form.categoryImage) {
-      formData.append("categoryImage", form.categoryImage); // ✅ Append only if present
+      formData.append("categoryImage", form.categoryImage);
     }
 
     try {
@@ -189,7 +192,6 @@ const ServiceApproval = () => {
           <div
             className="absolute inset-0 bg-black/40"
             onClick={() => setShowAddModal(false)}
-            aria-label="Close modal overlay"
           />
           <form
             onSubmit={handleFormSubmit}
@@ -233,6 +235,28 @@ const ServiceApproval = () => {
             </div>
 
             <div className="mb-3">
+              <label className="block mb-1 font-medium">Precautions & Aftercare (comma separated)</label>
+              <textarea
+                name="precautionsAndAftercare"
+                value={form.precautionsAndAftercare}
+                onChange={handleInputChange}
+                className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-pink-300"
+                placeholder="e.g. No sun, Avoid bleach, Hydrate"
+              />
+            </div>
+
+            <div className="mb-3">
+              <label className="block mb-1 font-medium">Ingredients (comma separated)</label>
+              <textarea
+                name="ingredients"
+                value={form.ingredients}
+                onChange={handleInputChange}
+                className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-pink-300"
+                placeholder="e.g. Aloe Vera, Vitamin C"
+              />
+            </div>
+
+            <div className="mb-3">
               <label className="block mb-1 font-medium">Main Image</label>
               <label className="inline-block cursor-pointer bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-md font-medium transition mr-2">
                 Choose File
@@ -263,7 +287,7 @@ const ServiceApproval = () => {
                   className="hidden"
                 />
               </label>
-              {form.subImages && form.subImages.length > 0 && (
+              {form.subImages.length > 0 && (
                 <span className="text-sm text-gray-700">{form.subImages.map(f => f.name).join(', ')}</span>
               )}
             </div>
