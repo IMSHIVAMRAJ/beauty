@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [form, setForm] = useState({ fullName: "", email: "" });
   const [success, setSuccess] = useState("");
   const [editing, setEditing] = useState(false);
+  const navigate = useNavigate();
 
   // Fetch user data from backend
   const fetchProfile = async () => {
@@ -47,7 +49,9 @@ const Profile = () => {
       setUser(data);
       setSuccess("Profile updated successfully!");
       setEditing(false);
-      setTimeout(() => setSuccess(""), 2000);
+      setTimeout(() => setSuccess(""), 1000);
+      // Redirect to home after update
+      setTimeout(() => navigate("/"), 1000);
     } catch (err) {
       console.error("Error updating profile:", err);
     }
