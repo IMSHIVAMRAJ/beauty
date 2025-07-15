@@ -77,7 +77,7 @@ const OTPLogin = () => {
       if (data.token) {
         setSuccess("Login successful!");
         localStorage.setItem("token", data.token);
-        setTimeout(() => navigate("/"), 1000);
+        setTimeout(() => navigate("/profile"), 1000);
       } else {
         setError(data.message || "Invalid OTP.");
       }

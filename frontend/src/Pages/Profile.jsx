@@ -4,10 +4,10 @@ import axios from "axios";
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [form, setForm] = useState({ fullName: "", email: "" });
-  const [editMode, setEditMode] = useState(false);
   const [success, setSuccess] = useState("");
+  const [editing, setEditing] = useState(false);
 
-  // ✅ Fetch user data from backend
+  // Fetch user data from backend
   const fetchProfile = async () => {
     try {
       const { data } = await axios.get("http://localhost:5000/api/users/me", {
@@ -22,12 +22,13 @@ const Profile = () => {
     }
   };
 
-  // ✅ Handle input change
+  // Handle input change
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setEditing(true);
   };
 
-  // ✅ Save changes to backend
+  // Save changes to backend
   const handleSave = async (e) => {
     e.preventDefault();
     try {
@@ -44,8 +45,8 @@ const Profile = () => {
         }
       );
       setUser(data);
-      setEditMode(false);
       setSuccess("Profile updated successfully!");
+      setEditing(false);
       setTimeout(() => setSuccess(""), 2000);
     } catch (err) {
       console.error("Error updating profile:", err);
@@ -66,21 +67,20 @@ const Profile = () => {
       >
         <h2 className="text-2xl font-extrabold text-black mb-2 text-center">My Profile</h2>
 
-        {/* ✅ Full Name */}
+        {/* Full Name */}
         <div className="flex flex-col gap-2">
           <label className="font-semibold text-black">Name</label>
           <input
             name="fullName"
             value={form.fullName}
             onChange={handleChange}
-            readOnly={!editMode} // 👈👈 instead of disabled
-            className={`w-full px-4 py-2 rounded-lg border-2 ${
-              editMode ? "border-pink-400 bg-pink-50" : "border-gray-200 bg-gray-100"
-            } text-black font-medium focus:outline-none transition`}
+            className="w-full px-4 py-2 rounded-lg border-2 border-pink-400 bg-pink-50 text-black font-medium focus:outline-none transition cursor-pointer"
+            onFocus={() => setEditing(true)}
+            autoComplete="off"
           />
         </div>
 
-        {/* ✅ Email */}
+        {/* Email */}
         <div className="flex flex-col gap-2">
           <label className="font-semibold text-black">Email</label>
           <input
@@ -88,14 +88,13 @@ const Profile = () => {
             type="email"
             value={form.email}
             onChange={handleChange}
-            readOnly={!editMode}
-            className={`w-full px-4 py-2 rounded-lg border-2 ${
-              editMode ? "border-pink-400 bg-pink-50" : "border-gray-200 bg-gray-100"
-            } text-black font-medium focus:outline-none transition`}
+            className="w-full px-4 py-2 rounded-lg border-2 border-pink-400 bg-pink-50 text-black font-medium focus:outline-none transition cursor-pointer"
+            onFocus={() => setEditing(true)}
+            autoComplete="off"
           />
         </div>
 
-        {/* ✅ Phone (Non-editable always) */}
+        {/* Phone (Non-editable always) */}
         <div className="flex flex-col gap-2">
           <label className="font-semibold text-black">Phone</label>
           <input
@@ -105,7 +104,7 @@ const Profile = () => {
           />
         </div>
 
-        {/* 🔒 Placeholder Password */}
+        {/* Placeholder Password */}
         <div className="flex flex-col gap-2">
           <label className="font-semibold text-black">Password</label>
           <input
@@ -119,39 +118,29 @@ const Profile = () => {
           </button>
         </div>
 
-        {/* ✅ Success Message */}
+        {/* Success Message */}
         {success && <div className="text-green-600 text-center font-semibold">{success}</div>}
 
-        {/* ✅ Buttons */}
+        {/* Buttons */}
         <div className="flex gap-4 mt-2">
-          {editMode ? (
-            <>
-              <button
-                type="submit"
-                className="flex-1 py-2 bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white rounded-lg font-bold text-lg shadow-md tracking-wide transition"
-              >
-                Save
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setEditMode(false);
-                  setForm({ fullName: user.fullName, email: user.email });
-                }}
-                className="flex-1 py-2 bg-gray-200 text-gray-700 rounded-lg font-bold text-lg shadow-md tracking-wide transition"
-              >
-                Cancel
-              </button>
-            </>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setEditMode(true)}
-              className="w-full py-2 bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white rounded-lg font-bold text-lg shadow-md tracking-wide transition"
-            >
-              Edit Profile
-            </button>
-          )}
+          <button
+            type="submit"
+            className="flex-1 py-2 bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white rounded-lg font-bold text-lg shadow-md tracking-wide transition"
+            disabled={!editing}
+          >
+            Update Profile
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setForm({ fullName: user.fullName, email: user.email });
+              setEditing(false);
+            }}
+            className="flex-1 py-2 bg-gray-200 text-gray-700 rounded-lg font-bold text-lg shadow-md tracking-wide transition"
+            disabled={!editing}
+          >
+            Cancel
+          </button>
         </div>
       </form>
     </div>
