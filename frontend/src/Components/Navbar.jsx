@@ -122,8 +122,22 @@ const Navbar = () => {
     window.location.reload(); // or use navigate('/login') if using react-router
   };
 
-  // Check if user is authenticated
-  const isLoggedIn = Boolean(localStorage.getItem('token'));
+  // --- LOGIN STATE MANAGEMENT ---
+  const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(localStorage.getItem('token')));
+
+  useEffect(() => {
+    // Listen for login/logout in other tabs
+    const handleStorage = () => {
+      setIsLoggedIn(Boolean(localStorage.getItem('token')));
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
+
+  // Also update on mount and when token changes in this tab
+  useEffect(() => {
+    setIsLoggedIn(Boolean(localStorage.getItem('token')));
+  }, []);
 
   return (
     <header className="w-full bg-white shadow-md px-2 sm:px-4 py-3 sm:py-5 sticky top-0 z-20">
