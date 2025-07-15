@@ -1,7 +1,7 @@
 import Service from "../models/Service.js";
 
 export const addService = async (req, res) => {
-  const { name, category, subcategory, price, discount, descriptionPoints } =
+  const { name, category, subcategory, price, discount, descriptionPoints, precautionsAndAftercare, ingredients } =
     req.body;
 
   const mainImage = req.files["mainImage"]?.[0]?.path;
@@ -17,6 +17,8 @@ export const addService = async (req, res) => {
     categoryImage,
     price,
     discount,
+  precautionsAndAftercare: JSON.parse(precautionsAndAftercare),
+  ingredients: JSON.parse(ingredients),
     finalPrice,
     descriptionPoints: JSON.parse(descriptionPoints),
     mainImage,
