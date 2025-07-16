@@ -126,12 +126,13 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(localStorage.getItem('token')));
 
   useEffect(() => {
-    // Listen for login/logout in other tabs
-    const handleStorage = () => {
-      setIsLoggedIn(Boolean(localStorage.getItem('token')));
+    const handleAuthChange = () => setIsLoggedIn(Boolean(localStorage.getItem('token')));
+    window.addEventListener('storage', handleAuthChange);
+    window.addEventListener('authChange', handleAuthChange);
+    return () => {
+      window.removeEventListener('storage', handleAuthChange);
+      window.removeEventListener('authChange', handleAuthChange);
     };
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
   // Also update on mount and when token changes in this tab

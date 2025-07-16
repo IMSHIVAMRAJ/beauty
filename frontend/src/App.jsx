@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Home from './Pages/Home';
 import OTPLogin from './Pages/OTPLogin';
 import ReferralPage from './Pages/ReferralPage';
@@ -20,10 +20,15 @@ import HairStudio from './Pages/HairStudio';
 import MakeYourPackage from './Pages/MakeYourPackage';
 import AdminPrivateRoute from './utils/AdminPrivateRoute';
 import BeauticianPrivateRoute from './utils/BeauticianPrivateRoute';
+
 const App = () => {
+  const location = useLocation();
+  // Hide Navbar on admin and beautician dashboard
+  const hideNavbar = ["/admin/dashboard", "/beautician/dashboard"].includes(location.pathname);
+
   return (
     <>
-      <Navbar />
+      {!hideNavbar && <Navbar />}
       <div style={{ minHeight: '80vh' }}>
         <Routes>
           <Route path='/' element={<Home />} />
