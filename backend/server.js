@@ -12,6 +12,7 @@ import userRoutes from "./routes/user.routes.js";
 import beauticianRoutes from "./routes/beautician.routes.js";
 
 import adminAuthRoutes from "./routes/adminAuth.routes.js";
+import locationRoutes from "./routes/location.routes.js";
 
 dotenv.config();
 const app = express();
@@ -28,6 +29,7 @@ app.use("/api/beautician", beauticianRoutes);
 // app.use("/api/admin", adminRoutes);
 app.use("/api/admin-auth", adminAuthRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/locations", locationRoutes);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() =>

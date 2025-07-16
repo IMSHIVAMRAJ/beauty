@@ -1,0 +1,18 @@
+{
+    "locations": [
+        {
+        "id": "1",
+        "name": "Mumbai",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "isActive": true
+        },
+        {
+        "id": "2",
+        "name": "Varanasi",
+        "city": "Varanasi",
+        "state": "Uttar Pradesh",
+        "isActive": true
+        }
+    ]
+}
