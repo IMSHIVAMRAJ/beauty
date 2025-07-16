@@ -37,6 +37,7 @@ const OTPVerify = () => {
       if (data.token) {
         setSuccess("Login successful!");
         localStorage.setItem("token", data.token);
+        window.dispatchEvent(new Event("authChange"));
         setTimeout(() => navigate("/profile"), 1000);
       } else {
         setError(data.message || "Invalid OTP.");
