@@ -177,7 +177,7 @@ export const approveBookingAndAssignBeautician = async (req, res) => {
 export const getAllBookings = async (req, res) => {
   try {
   const bookings = await Booking.find()
-  .populate("user", "name email phone")
+  .populate("user", "fullName  email phone")
   .populate("beautician", "name email phone")
   .populate({
     path: "services.service",

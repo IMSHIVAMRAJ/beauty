@@ -55,7 +55,7 @@ const BeauticianBookings = () => {
 
   const filteredBookings = bookings.filter(booking => {
     const matchesFilter = activeFilter === 'all' || booking.status === activeFilter;
-    const userName = booking.user?.name || "";
+    const userName = booking.user?.fullName || "";
     const serviceNames = booking.services?.map(s => s.service?.name).join(', ') || "";
     const matchesSearch = userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           serviceNames.toLowerCase().includes(searchTerm.toLowerCase());
@@ -102,7 +102,7 @@ const BeauticianBookings = () => {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h2 className="text-lg font-bold text-gray-800">
-                    {booking.user?.name || 'Unknown User'}
+                    {booking.user?.fullName || 'Unknown User'}
                   </h2>
                   <p className="text-gray-600">{booking.services.map(s => s.service?.name).join(', ')}</p>
                 </div>

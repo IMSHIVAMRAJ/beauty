@@ -53,7 +53,7 @@ export const getWeeklyAvailability = async (req, res) => {
 export const getBeauticianBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({ beautician: req.beautician.id }) // 👈 correct field
-      .populate({ path: "user", select: "name phone" })
+      .populate({ path: "user", select: "fullName phone" })
                 // 👈 get name/email
       .populate({ path: "services.service", select: "name" })        // 👈 service details
       .sort({ createdAt: -1 });

@@ -78,7 +78,7 @@ const AdminBookingControl = () => {
               ) : (
                 pending.map((b) => (
                   <tr key={b._id} className="border-t">
-                    <td className="p-2">{b.user?.name}</td>
+                    <td className="p-2">{b.user?.fullName}</td>
                     <td className="p-2">{b.user?.phone || "-"}</td>
                     <td className="p-2">
                       {b.services?.map((s) => s.service?.name).join(", ")}
@@ -133,7 +133,7 @@ const AdminBookingControl = () => {
               ) : (
                 approved.map((b) => (
                   <tr key={b._id} className="border-t">
-                    <td className="p-2">{b.user?.name}</td>
+                    <td className="p-2">{b.user?.fullName}</td>
                     <td className="p-2">{b.user?.phone || "-"}</td>
                     <td className="p-2">{b.beautician?.name}</td>
                     <td className="p-2">

@@ -300,7 +300,7 @@ const Cart = () => {
                     ? "from-blue-400 to-blue-600"
                     : booking.status === "completed"
                     ? "from-green-400 to-green-600"
-                    : "from-gray-400 to-gray-600"
+                    : "from-green-400 to-green-600"
                 }`}>
                   {booking.status}
                 </span>
