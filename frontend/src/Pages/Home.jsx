@@ -208,7 +208,7 @@ const Home = () => {
         className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-gradient-to-br from-[#E90000] to-[#FAA6FF] shadow-2xl flex items-center justify-center hover:scale-110 transition-transform border-4 border-white"
         aria-label="Open AI Assistant"
       >
-        <MessageCircle className="w-8 h-8 text-white drop-shadow" />
+        <span className="text-white text-2xl font-extrabold drop-shadow tracking-widest">AI</span>
       </button>
     </div>
   );
