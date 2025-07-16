@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Mail, HelpCircle, Home as HomeIcon, Stethoscope, CalendarCheck2, Share2 } from 'lucide-react';
+import { Mail, HelpCircle, Home as HomeIcon, Stethoscope, CalendarCheck2, Share2, MessageCircle, Sparkles, Droplets } from 'lucide-react';
 import ServicesModal from '../Components/ServicesModal';
 
 const carouselImages = [
@@ -9,8 +9,6 @@ const carouselImages = [
   'https://images.unsplash.com/photo-1524502397800-2eeaad7c3fe5?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
 ];
-
-const promoImg = 'https://plus.unsplash.com/premium_photo-1684407616442-8d5a1b7c978e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
 const services = [
   { name: 'Salon At Home', img: 'https://images.unsplash.com/photo-1498843053639-170ff2122f35?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', path: '/salon-at-home' },
@@ -59,7 +57,6 @@ const Home = () => {
   const [current, setCurrent] = useState(0);
   const [activeTrending, setActiveTrending] = useState(0);
   const [trendingServices, setTrendingServices] = useState([]);
-  const [showAllServices, setShowAllServices] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -160,6 +157,41 @@ const Home = () => {
         </div>
       </section>
 
+      {/* AI-Based Consultant Section */}
+      <section className="max-w-6xl mx-auto mt-10 mb-8 px-4">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-pink-700 mb-6 text-center tracking-tight drop-shadow">AI-Based Consultant</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Skincare Consultant Card */}
+          <div className="bg-white/95 rounded-2xl shadow-xl border border-pink-200 p-8 flex flex-col items-center text-center">
+            <Droplets className="w-12 h-12 text-[#E90000] mb-4" />
+            <h3 className="text-xl font-bold text-pink-700 mb-2">Skincare AI Consultant</h3>
+            <p className="text-gray-700 mb-4">Get personalized skincare recommendations using our AI-powered face and skin analysis. Discover the best routine for your unique skin needs!</p>
+            <div className="flex justify-center">
+              <a
+                href="/face-detection"
+                className="bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white font-semibold py-2 px-6 rounded-full shadow hover:from-pink-700 hover:to-pink-400 transition mx-2"
+              >
+                Start Skincare Consultation
+              </a>
+            </div>
+          </div>
+          {/* Haircare Consultant Card */}
+          <div className="bg-white/95 rounded-2xl shadow-xl border border-pink-200 p-8 flex flex-col items-center text-center">
+            <Sparkles className="w-12 h-12 text-[#FAA6FF] mb-4" />
+            <h3 className="text-xl font-bold text-pink-700 mb-2">Haircare AI Consultant</h3>
+            <p className="text-gray-700 mb-4">Let our AI analyze your hair concerns and recommend the best products and treatments for healthy, beautiful hair.</p>
+            <div className="flex justify-center mt-5">
+              <a
+                href="/hair-consult"
+                className="bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white font-semibold py-2 px-6 rounded-full shadow hover:from-pink-700 hover:to-pink-400 transition mx-2"
+              >
+                Start Haircare Consultation
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Bottom Nav */}
       <nav className="fixed bottom-0 left-0 w-full bg-white border-t border-pink-100 flex justify-around items-center py-2 md:hidden z-30">
         {navLinks.map((link) => (
@@ -169,6 +201,15 @@ const Home = () => {
           </a>
         ))}
       </nav>
+
+      {/* AI Assistant Floating Button */}
+      <button
+        onClick={() => alert('AI Assistant coming soon!')}
+        className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-gradient-to-br from-[#E90000] to-[#FAA6FF] shadow-2xl flex items-center justify-center hover:scale-110 transition-transform border-4 border-white"
+        aria-label="Open AI Assistant"
+      >
+        <MessageCircle className="w-8 h-8 text-white drop-shadow" />
+      </button>
     </div>
   );
 };
