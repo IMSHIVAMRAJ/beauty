@@ -1,26 +1,25 @@
-#For Deployment Start command will be "Python main.py"
-#For installing dependencies run "pip install -r requirements.txt"
-
 from flask import Flask, request, jsonify
 import joblib
 import json
 from preprocess import preprocess_input
 from flask_cors import CORS
 from predict import predict_service
-from database.db import save_to_db
+from database.db import save_to_db, get_all_skin_recommendations  # ✅ import skin GET
 from schemas import RecommendationRequest, RecommendationResponse
 from pydantic import ValidationError
 from schemas2 import HairRequest
 from predict2 import predict_recommendation
-from database.mongodb import save_to_db1
+from database.mongodb import save_to_db1, get_all_hair_recommendations  # ✅ both hair functions
 
 app = Flask(__name__)
 CORS(app, resources={r"/ai/*": {"origins": "http://localhost:5173"}})
 
+# Load ML model and service map
 model = joblib.load("models/beauty.pkl")
 with open("service_mapper.json", "r") as f:
     service_map = json.load(f)
 
+# Helper to match services with predictions
 def match_services(preds):
     matched = []
     seen = set()
@@ -40,6 +39,8 @@ def match_services(preds):
             })
 
     return matched
+
+# ---------------- Routes ----------------
 
 @app.route("/ai/analyze", methods=["POST"])
 def analyze():
@@ -65,16 +66,15 @@ def analyze():
             "status": "error",
             "message": str(e)
         }), 500
-    
+
 @app.route("/ai/recommend", methods=["POST"])
 def get_recommendation():
     try:
         data = request.get_json()
-
         validated_data = RecommendationRequest(**data)
 
         result = predict_service(validated_data.gender, validated_data.skin_concerns)
-        save_to_db(validated_data.name,validated_data.phone,validated_data.gender, validated_data.skin_concerns, result)
+        save_to_db(validated_data.name, validated_data.phone, validated_data.gender, validated_data.skin_concerns, result)
 
         response = RecommendationResponse(recommended_service=result)
         return jsonify(response.dict())
@@ -83,7 +83,8 @@ def get_recommendation():
         return jsonify({"error": ve.errors()}), 422
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
+# ✅ Hair POST
 @app.route("/ai/hair-recommend", methods=["POST"])
 def recommend():
     data = request.get_json()
@@ -92,13 +93,14 @@ def recommend():
         hair_request = HairRequest(**data)
     except Exception as e:
         return jsonify({"error": str(e)}), 400
-    
+
     name = hair_request.name
     phone = hair_request.phone
     gender = hair_request.gender.lower()
     hair_concerns = hair_request.hair_concerns
 
     prediction = predict_recommendation(gender, hair_concerns)
+
     save_to_db1({
         "name": name,
         "phone": phone,
@@ -108,6 +110,26 @@ def recommend():
     })
 
     return jsonify({"recommended_service": prediction})
+
+# ✅ Hair GET
+@app.route("/ai/hair-recommend", methods=["GET"])
+def get_all_hair_recommend():
+    try:
+        data = get_all_hair_recommendations()
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# ✅ NEW: Skin GET
+@app.route("/ai/skin-recommend", methods=["GET"])
+def get_all_skin_recommend():
+    try:
+        data = get_all_skin_recommendations()
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# ---------------- Main ----------------
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)

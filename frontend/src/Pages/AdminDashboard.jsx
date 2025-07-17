@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BeauticianManagement from "./BeauticianManagement";
 import ServiceApproval from "./ServiceApproval";
 import LocationManagement from "./LocationManagement";
@@ -7,6 +7,7 @@ import BookingControl from "./BookingControl";
 import BeauticianSlots from "./BeauticianSlots";
 import { LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const sections = [
   { name: "Beautician Management" },
@@ -15,31 +16,34 @@ const sections = [
   { name: "Coupon Management" },
   { name: "Booking Control" },
   { name: "Beautician Slots" },
-  
   { name: "Skin Problem" },
   { name: "Hair Problem" },
 ];
 
-const mockSkinProblems = [
-  { name: "Aarti Sharma", number: "9876543210", problem: "Acne and pigmentation" },
-  { name: "Priya Singh", number: "9123456780", problem: "Dry skin and redness" },
-  { name: "Meena Kumari", number: "9988776655", problem: "Dark spots" },
-];
-
-const mockHairProblems = [
-  { name: "Rohit Verma", number: "9876501234", problem: "Hair fall and dandruff" },
-  { name: "Sonal Jain", number: "9001122334", problem: "Split ends" },
-  { name: "Kiran Patel", number: "9876123450", problem: "Premature greying" },
-];
-
 const AdminDashboard = () => {
   const [active, setActive] = useState(sections[0].name);
+  const [hairData, setHairData] = useState([]);
+  const [skinData, setSkinData] = useState([]);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
     navigate('/admin/login');
   };
+
+  useEffect(() => {
+    if (active === "Hair Problem") {
+      axios.get("http://localhost:5001/ai/hair-recommend")
+        .then(res => setHairData(res.data))
+        .catch(err => console.error("Error fetching hair recommendations:", err));
+    }
+
+    if (active === "Skin Problem") {
+      axios.get("http://localhost:5001/ai/skin-recommend")
+        .then(res => setSkinData(res.data))
+        .catch(err => console.error("Error fetching skin recommendations:", err));
+    }
+  }, [active]);
 
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-[#E90000] to-[#FAA6FF]">
@@ -68,6 +72,7 @@ const AdminDashboard = () => {
           <LogOut className="w-5 h-5 mr-2" /> Logout
         </button>
       </aside>
+
       {/* Main Content */}
       <main className="flex-1 flex flex-col items-start p-8">
         <div className="bg-white/90 rounded-2xl shadow-xl p-10 w-full min-h-[300px] flex flex-col items-start h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)] overflow-y-auto">
@@ -78,30 +83,7 @@ const AdminDashboard = () => {
           {active === "Booking Control" && <BookingControl />}
           {active === "Beautician Slots" && <BeauticianSlots />}
 
-
-          {active === "Skin Problem" && (
-            <div className="w-full">
-              <h3 className="text-xl font-bold mb-4">Skin Problem Submissions</h3>
-              <table className="w-full bg-white rounded-xl shadow border">
-                <thead>
-                  <tr className="bg-pink-100 text-pink-800">
-                    <th className="py-2 px-4 text-left">Name</th>
-                    <th className="py-2 px-4 text-left">Number</th>
-                    <th className="py-2 px-4 text-left">Problem</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {mockSkinProblems.map((row, idx) => (
-                    <tr key={idx} className="border-t">
-                      <td className="py-2 px-4">{row.name}</td>
-                      <td className="py-2 px-4">{row.number}</td>
-                      <td className="py-2 px-4">{row.problem}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+          {/* Hair Problem Section */}
           {active === "Hair Problem" && (
             <div className="w-full">
               <h3 className="text-xl font-bold mb-4">Hair Problem Submissions</h3>
@@ -110,15 +92,52 @@ const AdminDashboard = () => {
                   <tr className="bg-pink-100 text-pink-800">
                     <th className="py-2 px-4 text-left">Name</th>
                     <th className="py-2 px-4 text-left">Number</th>
-                    <th className="py-2 px-4 text-left">Problem</th>
+                    <th className="py-2 px-4 text-left">Concerns</th>
+              
                   </tr>
                 </thead>
                 <tbody>
-                  {mockHairProblems.map((row, idx) => (
+                  {hairData.map((row, idx) => (
                     <tr key={idx} className="border-t">
                       <td className="py-2 px-4">{row.name}</td>
-                      <td className="py-2 px-4">{row.number}</td>
-                      <td className="py-2 px-4">{row.problem}</td>
+                      <td className="py-2 px-4">{row.phone}</td>
+                      <td className="py-2 px-4">
+                        {Array.isArray(row.hair_concerns)
+                          ? row.hair_concerns.join(", ")
+                          : row.hair_concerns}
+                      </td>
+                      
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Skin Problem Section */}
+          {active === "Skin Problem" && (
+            <div className="w-full">
+              <h3 className="text-xl font-bold mb-4">Skin Problem Submissions</h3>
+              <table className="w-full bg-white rounded-xl shadow border">
+                <thead>
+                  <tr className="bg-pink-100 text-pink-800">
+                    <th className="py-2 px-4 text-left">Name</th>
+                    <th className="py-2 px-4 text-left">Number</th>
+                    <th className="py-2 px-4 text-left">Concerns</th>
+               
+                  </tr>
+                </thead>
+                <tbody>
+                  {skinData.map((row, idx) => (
+                    <tr key={idx} className="border-t">
+                      <td className="py-2 px-4">{row.name}</td>
+                      <td className="py-2 px-4">{row.phone}</td>
+                      <td className="py-2 px-4">
+                        {Array.isArray(row.skin_concerns)
+                          ? row.skin_concerns.join(", ")
+                          : row.skin_concerns}
+                      </td>
+                    
                     </tr>
                   ))}
                 </tbody>
@@ -131,4 +150,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard; 
+export default AdminDashboard;

@@ -14,3 +14,6 @@ def save_to_db(name: str, phone: str, gender: str, skin_concerns: list, recommen
         "recommended_service": recommendation,
         "timestamp": datetime.now()
 })
+def get_all_skin_recommendations():
+    data = list(collection.find({}, {"_id": 0}))
+    return data
