@@ -171,36 +171,35 @@ const handleResultClick = (item) => {
           )}
         </div>
 
-        {/* Center: Search Bar */}
-        <div className="relative flex-1 max-w-lg mx-2">
-          <input
-            type="text"
-            placeholder="Search services..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="w-full px-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring focus:ring-pink-300 text-sm"
-            onFocus={() => setSearchFocus(true)}
-            onBlur={() => setTimeout(() => setShowResults(false), 200)}
-          />
-          <Search className="absolute left-3 top-2.5 text-gray-400 w-5 h-5" />
-          {showResults && results.length > 0 && (
-            <ul className="absolute bg-white border w-full rounded-md mt-1 max-h-60 overflow-y-auto shadow z-50">
-              {results.map((item, index) => (
-                <li
-                  key={item._id}
-                  className="px-4 py-2 hover:bg-pink-50 cursor-pointer"
-                  onClick={() => handleResultClick(item)}
-                >
-                  {item.name}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        {/* Right: Nav Links, Cart & User */}
-        <div className="flex items-center gap-2 sm:gap-4 min-w-max">
-          <nav className="hidden md:flex items-center gap-4 flex-shrink-0">
+        {/* Center: Search Bar + Nav Links in a row */}
+        <div className="flex flex-1 justify-start items-center gap-3 max-w-3xl mx-2">
+          <div className="relative w-full max-w-md">
+            <input
+              type="text"
+              placeholder="What do you want to shop for today?"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="w-full px-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring focus:ring-pink-300 text-sm"
+              onFocus={() => setSearchFocus(true)}
+              onBlur={() => setTimeout(() => setShowResults(false), 200)}
+            />
+            <Search className="absolute left-3 top-2.5 text-gray-400 w-5 h-5" />
+            {showResults && results.length > 0 && (
+              <ul className="absolute bg-white border w-full rounded-md mt-1 max-h-60 overflow-y-auto shadow z-50">
+                {results.map((item, index) => (
+                  <li
+                    key={item._id}
+                    className="px-4 py-2 hover:bg-pink-50 cursor-pointer"
+                    onClick={() => handleResultClick(item)}
+                  >
+                    {item.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          {/* Nav Links in a row, right of search bar */}
+          <nav className="flex items-center gap-6 flex-shrink-0">
             {navLinks.map((link) => (
               <Link key={link.name} to={link.href} className="flex items-center px-2 py-1.5 rounded-full text-pink-500 hover:bg-pink-50 font-medium">
                 {link.icon}
@@ -208,6 +207,10 @@ const handleResultClick = (item) => {
               </Link>
             ))}
           </nav>
+        </div>
+
+        {/* Right: Cart & User */}
+        <div className="flex items-center gap-2 sm:gap-4 min-w-max">
           {/* Cart & User */}
           <div className="flex items-center gap-2 sm:gap-3">
             {isLoggedIn ? (
