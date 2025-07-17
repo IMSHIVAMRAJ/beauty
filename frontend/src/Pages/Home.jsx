@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Mail, HelpCircle, Home as HomeIcon, Stethoscope, CalendarCheck2, Share2, MessageCircle, Sparkles, Droplets } from 'lucide-react';
 import ServicesModal from '../Components/ServicesModal';
+import { useNavigate } from "react-router-dom";
 
 const carouselImages = [
   'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&w=800',
@@ -54,6 +55,9 @@ const ServiceCard = ({ img, title, subtitle, price, tag, offer, rating, reviews 
 );
 
 const Home = () => {
+
+    const navigate = useNavigate();
+
   const [current, setCurrent] = useState(0);
   const [activeTrending, setActiveTrending] = useState(0);
   const [trendingServices, setTrendingServices] = useState([]);
@@ -167,12 +171,12 @@ const Home = () => {
             <h3 className="text-xl font-bold text-pink-700 mb-2">Skincare AI Consultant</h3>
             <p className="text-gray-700 mb-4">Get personalized skincare recommendations using our AI-powered face and skin analysis. Discover the best routine for your unique skin needs!</p>
             <div className="flex justify-center">
-              <a
-                href="/face-detection"
+              <button
+                onClick={() => navigate("/ai/face-analyze")}
                 className="bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white font-semibold py-2 px-6 rounded-full shadow hover:from-pink-700 hover:to-pink-400 transition mx-2"
               >
                 Start Skincare Consultation
-              </a>
+              </button>
             </div>
           </div>
           {/* Haircare Consultant Card */}
@@ -182,7 +186,7 @@ const Home = () => {
             <p className="text-gray-700 mb-4">Let our AI analyze your hair concerns and recommend the best products and treatments for healthy, beautiful hair.</p>
             <div className="flex justify-center mt-5">
               <a
-                href="/hair-consult"
+                onClick={() => navigate("/ai/hair-recommend")}
                 className="bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white font-semibold py-2 px-6 rounded-full shadow hover:from-pink-700 hover:to-pink-400 transition mx-2"
               >
                 Start Haircare Consultation
@@ -204,7 +208,7 @@ const Home = () => {
 
       {/* AI Assistant Floating Button */}
       <button
-        onClick={() => alert('AI Assistant coming soon!')}
+        onClick={() => navigate("/ai/face-detect")}
         className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-gradient-to-br from-[#E90000] to-[#FAA6FF] shadow-2xl flex items-center justify-center hover:scale-110 transition-transform border-4 border-white"
         aria-label="Open AI Assistant"
       >

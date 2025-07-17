@@ -20,6 +20,12 @@ import HairStudio from './Pages/HairStudio';
 import MakeYourPackage from './Pages/MakeYourPackage';
 import AdminPrivateRoute from './utils/AdminPrivateRoute';
 import BeauticianPrivateRoute from './utils/BeauticianPrivateRoute';
+import FaceDetectionPage from "./pages/FaceDetectionPage";
+import SkinAnalysisFormPage from "./pages/SkinAnalysisFormPage";
+import ResultPage from "./pages/ResultPage";
+import FaceAnalysisPage from "./Pages/FaceAnalysisPage";
+import RecommendationForm from "./Pages/RecommendationForm";
+import HairRecommendationForm from './Pages/HairRecommendationForm';
 
 const App = () => {
   const location = useLocation();
@@ -44,14 +50,20 @@ const App = () => {
           <Route path='/hair-studio' element={<HairStudio />} />
           <Route path='/make-your-package' element={<MakeYourPackage />} />
           <Route path="/admin/login" element={<AdminLogin />} />
-           <Route path="/admin/dashboard" element={
+          <Route path="/ai/face-detect" element={<FaceDetectionPage />} />
+          <Route path="/ai/analyze" element={<SkinAnalysisFormPage />} />
+          <Route path="/ai/result" element={<ResultPage />} />
+          <Route path ="/ai/face-analyze" element={<FaceAnalysisPage />} />
+          <Route path="/ai/recommend" element={<RecommendationForm />} />
+          <Route path="/ai/hair-recommend" element={<HairRecommendationForm />} />
+          <Route path="/admin/dashboard" element={
           <AdminPrivateRoute>
             <AdminDashboard />
           </AdminPrivateRoute>
         }
       />
           <Route path="/beautician/login" element={<BeauticianLogin />} />
-         <Route
+        <Route
         path="/beautician/dashboard"
         element={
           <BeauticianPrivateRoute>

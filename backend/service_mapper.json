@@ -1,0 +1,408 @@
+{
+  "detan facial": {
+    "name": "Detan Facial",
+    "description": "Detan Facial is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/face-de-tan",
+    "tags": [
+      "detan",
+      "detan facial"
+    ],
+    "type": "Service"
+  },
+  "oil control facial": {
+    "name": "Oil Control Facial",
+    "description": "Oil Control Facial is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/oil-control-facial",
+    "tags": [
+      "oil",
+      "control",
+      "oil control facial"
+    ],
+    "type": "Service"
+  },
+  "hydrating glow facial": {
+    "name": "Hydrating Glow Facial",
+    "description": "Hydrating Glow Facial is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/hydrating-glow-facial",
+    "tags": [
+      "hydrating",
+      "glow",
+      "hydrating glow facial"
+    ],
+    "type": "Service"
+  },
+  "manicure": {
+    "name": "Manicure",
+    "description": "Manicure is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/classic-manicure",
+    "tags": [
+      "manicure"
+    ],
+    "type": "Service"
+  },
+  "full body waxing": {
+    "name": "Full Body Waxing",
+    "description": "Full Body Waxing is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/full-body-waxing",
+    "tags": [
+      "full",
+      "body",
+      "waxing",
+      "full body waxing"
+    ],
+    "type": "Service"
+  },
+  "chemical peel": {
+    "name": "Chemical Peel",
+    "description": "Chemical Peel is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/chemical-peel",
+    "tags": [
+      "chemical peel",
+      "peel",
+      "chemical"
+    ],
+    "type": "Service"
+  },
+  "leg waxing": {
+    "name": "Leg Waxing",
+    "description": "Leg Waxing is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/leg-waxing",
+    "tags": [
+      "leg",
+      "waxing",
+      "leg waxing"
+    ],
+    "type": "Service"
+  },
+  "skin tightening treatment": {
+    "name": "Skin Tightening Treatment",
+    "description": "Skin Tightening Treatment is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/skin-tightening",
+    "tags": [
+      "skin tightening treatment",
+      "skin",
+      "tightening"
+    ],
+    "type": "Service"
+  },
+  "laser hair reduction (face)": {
+    "name": "Laser Hair Reduction (Face)",
+    "description": "Laser Hair Reduction (Face) is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/laser-hair-reduction-face",
+    "tags": [
+      "laser",
+      "laser hair reduction (face)",
+      "face",
+      "hair",
+      "reduction"
+    ],
+    "type": "Service"
+  },
+  "gold facial": {
+    "name": "Gold Facial",
+    "description": "Gold Facial is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/gold-facial",
+    "tags": [
+      "gold",
+      "gold facial"
+    ],
+    "type": "Service"
+  },
+  "sensitive skin clean up": {
+    "name": "Sensitive Skin Clean Up",
+    "description": "Sensitive Skin Clean Up is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/sensitive-skin",
+    "tags": [
+      "sensitive skin clean up",
+      "sensitive",
+      "skin",
+      "clean"
+    ],
+    "type": "Service"
+  },
+  "spa pedicure": {
+    "name": "Spa Pedicure",
+    "description": "Spa Pedicure is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/spa-pedicure",
+    "tags": [
+      "pedicure",
+      "spa",
+      "spa pedicure"
+    ],
+    "type": "Service"
+  },
+  "spa manicure": {
+    "name": "Spa Manicure",
+    "description": "Spa Manicure is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/spa-medicure",
+    "tags": [
+      "spa manicure",
+      "spa",
+      "manicure"
+    ],
+    "type": "Service"
+  },
+  "deep clean up": {
+    "name": "Deep Clean Up",
+    "description": "Deep Clean Up is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/deep-cleanup",
+    "tags": [
+      "deep clean up",
+      "deep",
+      "clean"
+    ],
+    "type": "Service"
+  },
+  "acne glow facial": {
+    "name": "Acne Glow Facial",
+    "description": "Acne Glow Facial is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/acne-glow-facial",
+    "tags": [
+      "acne",
+      "acne glow facial",
+      "glow"
+    ],
+    "type": "Service"
+  },
+  "skin brightening facial": {
+    "name": "Skin Brightening Facial",
+    "description": "Skin Brightening Facial is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/skin-brightening-facial",
+    "tags": [
+      "skin brightening facial",
+      "brightening",
+      "skin"
+    ],
+    "type": "Service"
+  },
+  "clean up": {
+    "name": "Clean Up",
+    "description": "Clean Up is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/clean-up",
+    "tags": [
+      "clean up",
+      "clean"
+    ],
+    "type": "Service"
+  },
+  "anti pigmentation facial": {
+    "name": "Anti\u2011Pigmentation Facial",
+    "description": "Anti\u2011Pigmentation Facial is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/anti-pigmentation",
+    "tags": [
+      "anti\u2011pigmentation",
+      "anti\u2011pigmentation facial"
+    ],
+    "type": "Service"
+  },
+  "soothing facial": {
+    "name": "Soothing Facial",
+    "description": "Soothing Facial is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/soothing-facial",
+    "tags": [
+      "soothing",
+      "soothing facial"
+    ],
+    "type": "Service"
+  },
+  "detan manicure": {
+    "name": "Detan Manicure",
+    "description": "Detan Manicure is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/detan-manicure",
+    "tags": [
+      "detan",
+      "detan manicure",
+      "manicure"
+    ],
+    "type": "Service"
+  },
+  "anti-pigmentation facial": {
+    "name": "Anti-Pigmentation Facial",
+    "description": "Anti-Pigmentation Facial is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/anti-pigmentation",
+    "tags": [
+      "anti-pigmentation facial",
+      "anti",
+      "pigmentation"
+    ],
+    "type": "Service"
+  },
+  "rica waxing": {
+    "name": "Rica Waxing",
+    "description": "Rica Waxing is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/rica-waxing",
+    "tags": [
+      "waxing",
+      "rica waxing",
+      "rica"
+    ],
+    "type": "Service"
+  },
+  "underarm waxing": {
+    "name": "Underarm Waxing",
+    "description": "Underarm Waxing is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/underarm-waxing",
+    "tags": [
+      "underarm",
+      "waxing",
+      "underarm waxing"
+    ],
+    "type": "Service"
+  },
+  "pedicure": {
+    "name": "Pedicure",
+    "description": "Pedicure is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/pedicure",
+    "tags": [
+      "pedicure"
+    ],
+    "type": "Service"
+  },
+  "diamond facial": {
+    "name": "Diamond Facial",
+    "description": "Diamond Facial is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/diamond-facial",
+    "tags": [
+      "diamond facial",
+      "diamond"
+    ],
+    "type": "Service"
+  },
+  "moisturizing clean up": {
+    "name": "Moisturizing Clean Up",
+    "description": "Moisturizing Clean Up is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/moisturizing-cleanup",
+    "tags": [
+      "moisturizing clean up",
+      "moisturizing",
+      "clean"
+    ],
+    "type": "Service"
+  },
+  "detan pedicure": {
+    "name": "Detan Pedicure",
+    "description": "Detan Pedicure is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/detan-pedicure",
+    "tags": [
+      "pedicure",
+      "detan",
+      "detan pedicure"
+    ],
+    "type": "Service"
+  },
+  "anti-ageing facial": {
+    "name": "Anti-Ageing Facial",
+    "description": "Anti-Ageing Facial is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/anti-ageing",
+    "tags": [
+      "anti-ageing facial",
+      "ageing",
+      "anti"
+    ],
+    "type": "Service"
+  },
+  "arm waxing": {
+    "name": "Arm Waxing",
+    "description": "Arm Waxing is a specialized beauty service tailored to skin and treatment needs.",
+    "url": "https://www.yesmadam.com/service/arm-waxing",
+    "tags": [
+      "arm",
+      "waxing",
+      "arm waxing"
+    ],
+    "type": "Service"
+  },
+  "bridal glow combo": {
+    "name": "Bridal Glow Combo",
+    "description": "A complete pre-wedding skin prep combo with facial, waxing, and pedicure for a radiant bridal glow.",
+    "url": "https://www.yesmadam.com/combo/bridal-glow-combo",
+    "tags": [
+      "bridal",
+      "wedding",
+      "glow",
+      "combo",
+      "facial",
+      "waxing",
+      "pedicure"
+    ],
+    "type": "Combo Pack",
+    "combo_of": [
+      "gold facial",
+      "full body waxing",
+      "detan pedicure"
+    ]
+},
+
+    "festival prep pack": {
+    "name": "Festival Prep Pack",
+    "description": "Glow up for festivals with this essential care combo of detan facial and rica waxing.",
+    "url": "https://www.yesmadam.com/combo/festival-prep-pack",
+    "tags": [
+      "festival",
+      "prep",
+      "combo",
+      "detan",
+      "facial",
+      "waxing"
+    ],
+    "type": "Combo Pack",
+    "combo_of": [
+      "detan facial",
+      "rica waxing"
+    ]
+},
+
+    "glow and hydrate combo": {
+    "name": "Glow and Hydrate Combo",
+    "description": "Perfect for dry or dull skin, this combo combines glow and hydration treatments for a refreshed face.",
+    "url": "https://www.yesmadam.com/combo/glow-and-hydrate",
+    "tags": [
+      "hydrating",
+      "glow",
+      "combo",
+      "facial",
+      "dull skin"
+    ],
+    "type": "Combo Pack",
+    "combo_of": [
+      "hydrating glow facial",
+      "moisturizing clean up"
+    ]
+},
+
+    "anti-pigmentation therapy combo": {
+    "name": "Anti-Pigmentation Therapy Combo",
+    "description": "Target pigmentation and dark spots with this expert combo of facial and clean-up.",
+    "url": "https://www.yesmadam.com/combo/anti-pigmentation-therapy",
+    "tags": [
+      "anti-pigmentation",
+      "pigmentation",
+      "combo",
+      "facial",
+      "dark spots"
+    ],
+    "type": "Combo Pack",
+    "combo_of": [
+      "anti-pigmentation facial",
+      "deep clean up"
+    ]
+},
+
+    "party ready glow pack": {
+    "name": "Party Ready Glow Pack",
+    "description": "Get your glow on with this quick glam-up combo for parties including facial and manicure.",
+    "url": "https://www.yesmadam.com/combo/party-glow-pack",
+    "tags": [
+      "party",
+      "glow",
+      "combo",
+      "facial",
+      "manicure"
+    ],
+    "type": "Combo Pack",
+    "combo_of": [
+      "diamond facial",
+      "spa manicure"
+    ]
+  }
+}
