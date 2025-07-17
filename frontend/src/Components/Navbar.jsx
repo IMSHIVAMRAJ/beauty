@@ -11,7 +11,7 @@ const navLinks = [
   { name: 'Home', icon: <Home className="w-5 h-5 mr-1" />, href: '/' },
   { name: 'Consultation', icon: <Stethoscope className="w-5 h-5 mr-1" />, href: '#' },
   { name: 'Booking', icon: <CalendarCheck2 className="w-5 h-5 mr-1" />, href: '/cart' },
-  { name: 'Refer', icon: <Share2 className="w-5 h-5 mr-1" />, href: '#' },
+  { name: 'Refer', icon: <Share2 className="w-5 h-5 mr-1" />, href: '/referral' },
 ];
 
 const Navbar = () => {
@@ -134,9 +134,9 @@ const handleResultClick = (item) => {
 
   return (
     <header className="w-full bg-white shadow-md px-2 sm:px-4 py-3 sm:py-5 sticky top-0 z-20">
-      <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-4 w-full">
-        {/* Location Dropdown */}
-        <div className="relative min-w-max mb-2 sm:mb-0" ref={dropdownRef}>
+      <div className="flex items-center justify-between w-full gap-2 sm:gap-4">
+        {/* Left: Location Dropdown */}
+        <div className="flex items-center min-w-max" ref={dropdownRef}>
           <button
             onClick={() => setLocationDropdown(v => !v)}
             className="flex items-center gap-1 text-sm sm:text-base font-semibold text-gray-700 px-2 py-1 rounded-full hover:bg-pink-50"
@@ -171,8 +171,8 @@ const handleResultClick = (item) => {
           )}
         </div>
 
-        {/* Search Bar */}
-        <div className="relative w-full sm:max-w-xs flex-1 mb-2 sm:mb-0">
+        {/* Center: Search Bar */}
+        <div className="relative flex-1 max-w-lg mx-2">
           <input
             type="text"
             placeholder="Search services..."
@@ -186,60 +186,60 @@ const handleResultClick = (item) => {
           {showResults && results.length > 0 && (
             <ul className="absolute bg-white border w-full rounded-md mt-1 max-h-60 overflow-y-auto shadow z-50">
               {results.map((item, index) => (
-               <li
-  key={item._id}
-  className="px-4 py-2 hover:bg-pink-50 cursor-pointer"
-  onClick={() => handleResultClick(item._id)}
->
-  {item.name}
-</li>
-
+                <li
+                  key={item._id}
+                  className="px-4 py-2 hover:bg-pink-50 cursor-pointer"
+                  onClick={() => handleResultClick(item)}
+                >
+                  {item.name}
+                </li>
               ))}
             </ul>
           )}
         </div>
 
-        {/* Nav Links */}
-        <nav className="hidden md:flex items-center gap-4 flex-shrink-0 mb-2 md:mb-0">
-          {navLinks.map((link) => (
-            <Link key={link.name} to={link.href} className="flex items-center px-2 py-1.5 rounded-full text-pink-500 hover:bg-pink-50 font-medium">
-              {link.icon}
-              <span>{link.name}</span>
-            </Link>
-          ))}
-        </nav>
-
-        {/* Cart & User */}
-        <div className="flex items-center gap-3">
-          {isLoggedIn ? (
-            <div className="relative" ref={profileRef}>
-              <button onClick={() => setProfileDropdown(v => !v)} className="p-2 rounded-full hover:bg-gray-100">
-                <User2 className="w-6 h-6 text-gray-600" />
-              </button>
-              {profileDropdown && (
-                <div className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg border p-2 z-40">
-                  <Link to="/profile" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-pink-50 text-gray-700 font-semibold">
-                    <User2 className="w-4 h-4" /> My Profile
-                  </Link>
-                  <button onClick={handleLogout} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-red-600 hover:bg-red-50 font-semibold mt-1">
-                    <LogOut className="w-4 h-4" /> Logout
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <Link to="/otp-login" className="px-4 py-2 rounded-full bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white font-bold shadow hover:from-pink-700 hover:to-pink-400">
-              Login
-            </Link>
-          )}
-          <Link to="/cart" className="relative p-2 rounded-full hover:bg-gray-100">
-            <ShoppingCart className="w-6 h-6 text-gray-600" />
-            {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow">
-                {cartCount}
-              </span>
+        {/* Right: Nav Links, Cart & User */}
+        <div className="flex items-center gap-2 sm:gap-4 min-w-max">
+          <nav className="hidden md:flex items-center gap-4 flex-shrink-0">
+            {navLinks.map((link) => (
+              <Link key={link.name} to={link.href} className="flex items-center px-2 py-1.5 rounded-full text-pink-500 hover:bg-pink-50 font-medium">
+                {link.icon}
+                <span>{link.name}</span>
+              </Link>
+            ))}
+          </nav>
+          {/* Cart & User */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {isLoggedIn ? (
+              <div className="relative" ref={profileRef}>
+                <button onClick={() => setProfileDropdown(v => !v)} className="p-2 rounded-full hover:bg-gray-100">
+                  <User2 className="w-6 h-6 text-gray-600" />
+                </button>
+                {profileDropdown && (
+                  <div className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg border p-2 z-40">
+                    <Link to="/profile" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-pink-50 text-gray-700 font-semibold">
+                      <User2 className="w-4 h-4" /> My Profile
+                    </Link>
+                    <button onClick={handleLogout} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-red-600 hover:bg-red-50 font-semibold mt-1">
+                      <LogOut className="w-4 h-4" /> Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link to="/otp-login" className="px-4 py-2 rounded-full bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white font-bold shadow hover:from-pink-700 hover:to-pink-400">
+                Login
+              </Link>
             )}
-          </Link>
+            <Link to="/cart" className="relative p-2 rounded-full hover:bg-gray-100">
+              <ShoppingCart className="w-6 h-6 text-gray-600" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+          </div>
         </div>
       </div>
     </header>
