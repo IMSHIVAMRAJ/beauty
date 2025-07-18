@@ -88,17 +88,6 @@ const MakeYourPackage = () => {
 
     return (
         <div className="bg-gray-50 min-h-screen font-sans pb-14">
-            {/* Header */}
-            <header className="bg-white shadow-sm sticky top-0 z-10 p-4 flex items-center justify-between">
-                <button>
-                    <ArrowLeft />
-                </button>
-                <h1 className="font-bold text-xl">Make Your Package</h1>
-                <button>
-                    <Share2 />
-                </button>
-            </header>
-
             {/* Main Content */}
             <main>
                 {/* Categories */}

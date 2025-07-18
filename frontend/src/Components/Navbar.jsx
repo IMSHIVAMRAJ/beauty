@@ -1,5 +1,3 @@
-// Paste this entire file in Navbar.jsx
-
 import React, { useState, useEffect, useRef } from 'react';
 import { MapPin, ChevronDown, User2, ShoppingCart, Home, Stethoscope, CalendarCheck2, Share2, Search, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -16,7 +14,6 @@ const navLinks = [
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [searchFocus, setSearchFocus] = useState(false);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -132,6 +129,19 @@ const handleResultClick = (item) => {
     window.location.reload();
   };
 
+  // Scroll to AI-Based Consultant section on Home
+  const handleConsultationClick = (e) => {
+    e.preventDefault();
+    if (window.location.pathname !== '/') {
+      navigate('/', { state: { scrollToConsultant: true } });
+    } else {
+      const section = document.getElementById('ai-consultant-section');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
     <header className="w-full bg-white shadow-md px-2 sm:px-4 py-3 sm:py-5 sticky top-0 z-20">
       <div className="flex items-center justify-between w-full gap-2 sm:gap-4">
@@ -173,39 +183,55 @@ const handleResultClick = (item) => {
 
         {/* Center: Search Bar + Nav Links in a row */}
         <div className="flex flex-1 justify-start items-center gap-3 max-w-3xl mx-2">
-          <div className="relative w-full max-w-md">
-            <input
-              type="text"
-              placeholder="What do you want to shop for today?"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="w-full px-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring focus:ring-pink-300 text-sm"
-              onFocus={() => setSearchFocus(true)}
-              onBlur={() => setTimeout(() => setShowResults(false), 200)}
-            />
-            <Search className="absolute left-3 top-2.5 text-gray-400 w-5 h-5" />
-            {showResults && results.length > 0 && (
-              <ul className="absolute bg-white border w-full rounded-md mt-1 max-h-60 overflow-y-auto shadow z-50">
-                {results.map((item, index) => (
-                  <li
-                    key={item._id}
-                    className="px-4 py-2 hover:bg-pink-50 cursor-pointer"
-                    onClick={() => handleResultClick(item)}
-                  >
-                    {item.name}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          {/* Searchbar: Only show on mobile if logged in */}
+          {(isLoggedIn || window.innerWidth >= 640) && (
+            <div className="relative w-full sm:max-w-md">
+              <input
+                type="text"
+                placeholder="Search services, salons, offers..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full px-12 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring focus:ring-pink-300 text-base sm:text-sm bg-white shadow-sm transition-all duration-200
+                  sm:px-10 sm:py-2 sm:rounded-full mt-6 sm:mt-0"
+                onFocus={() => setShowResults(true)}
+                onBlur={() => setTimeout(() => setShowResults(false), 200)}
+              />
+              <Search className="absolute left-4 top-3.5 sm:left-3 sm:top-2.5 text-gray-400 w-6 h-6 sm:w-5 sm:h-5" />
+              {showResults && results.length > 0 && (
+                <ul className="absolute bg-white border w-full rounded-md mt-1 max-h-60 overflow-y-auto shadow z-50">
+                  {results.map((item) => (
+                    <li
+                      key={item._id}
+                      className="px-4 py-2 hover:bg-pink-50 cursor-pointer"
+                      onClick={() => handleResultClick(item)}
+                    >
+                      {item.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
           {/* Nav Links in a row, right of search bar */}
-          <nav className="flex items-center gap-6 flex-shrink-0">
-            {navLinks.map((link) => (
-              <Link key={link.name} to={link.href} className="flex items-center px-2 py-1.5 rounded-full text-pink-500 hover:bg-pink-50 font-medium">
-                {link.icon}
-                <span>{link.name}</span>
-              </Link>
-            ))}
+          <nav className="hidden sm:flex items-center gap-6 flex-shrink-0">
+            {navLinks.map((link) =>
+              link.name === 'Consultation' ? (
+                <a
+                  key={link.name}
+                  href="#ai-consultant-section"
+                  onClick={handleConsultationClick}
+                  className="flex items-center px-2 py-1.5 rounded-full text-pink-500 hover:bg-pink-50 font-medium"
+                >
+                  {link.icon}
+                  <span>{link.name}</span>
+                </a>
+              ) : (
+                <Link key={link.name} to={link.href} className="flex items-center px-2 py-1.5 rounded-full text-pink-500 hover:bg-pink-50 font-medium">
+                  {link.icon}
+                  <span>{link.name}</span>
+                </Link>
+              )
+            )}
           </nav>
         </div>
 

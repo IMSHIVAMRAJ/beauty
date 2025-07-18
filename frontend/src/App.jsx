@@ -8,6 +8,7 @@ import AddServices from './Pages/AddServices';
 import Cart from './Pages/Cart';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
+import BottomNav from './Components/BottomNav';
 import AdminLogin from './Pages/AdminLogin';
 import AdminDashboard from './Pages/AdminDashboard';
 import BeauticianLogin from './Pages/BeauticianLogin';
@@ -73,6 +74,7 @@ const App = () => {
       />
         </Routes>
       </div>
+      {!hideNavbar && <BottomNav />}
       <Footer />
     </>
   );
