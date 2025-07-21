@@ -183,35 +183,33 @@ const handleResultClick = (item) => {
 
         {/* Center: Search Bar + Nav Links in a row */}
         <div className="flex flex-1 justify-start items-center gap-3 max-w-3xl mx-2">
-          {/* Searchbar: Only show on mobile if logged in */}
-          {(isLoggedIn || window.innerWidth >= 640) && (
-            <div className="relative w-full sm:max-w-md">
-              <input
-                type="text"
-                placeholder="Search services, salons, offers..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="w-full px-12 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring focus:ring-pink-300 text-base sm:text-sm bg-white shadow-sm transition-all duration-200
-                  sm:px-10 sm:py-2 sm:rounded-full mt-6 sm:mt-0"
-                onFocus={() => setShowResults(true)}
-                onBlur={() => setTimeout(() => setShowResults(false), 200)}
-              />
-              <Search className="absolute left-4 top-3.5 sm:left-3 sm:top-2.5 text-gray-400 w-6 h-6 sm:w-5 sm:h-5" />
-              {showResults && results.length > 0 && (
-                <ul className="absolute bg-white border w-full rounded-md mt-1 max-h-60 overflow-y-auto shadow z-50">
-                  {results.map((item) => (
-                    <li
-                      key={item._id}
-                      className="px-4 py-2 hover:bg-pink-50 cursor-pointer"
-                      onClick={() => handleResultClick(item)}
-                    >
-                      {item.name}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          )}
+          {/* Searchbar: Always hide on mobile, show on sm+ */}
+          <div className="relative w-full sm:max-w-md hidden sm:block">
+            <input
+              type="text"
+              placeholder="Search services, salons, offers..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="w-full px-12 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring focus:ring-pink-300 text-base sm:text-sm bg-white shadow-sm transition-all duration-200
+                sm:px-10 sm:py-2 sm:rounded-full mt-6 sm:mt-0"
+              onFocus={() => setShowResults(true)}
+              onBlur={() => setTimeout(() => setShowResults(false), 200)}
+            />
+            <Search className="absolute left-4 top-3.5 sm:left-3 sm:top-2.5 text-gray-400 w-6 h-6 sm:w-5 sm:h-5" />
+            {showResults && results.length > 0 && (
+              <ul className="absolute bg-white border w-full rounded-md mt-1 max-h-60 overflow-y-auto shadow z-50">
+                {results.map((item) => (
+                  <li
+                    key={item._id}
+                    className="px-4 py-2 hover:bg-pink-50 cursor-pointer"
+                    onClick={() => handleResultClick(item)}
+                  >
+                    {item.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
           {/* Nav Links in a row, right of search bar */}
           <nav className="hidden sm:flex items-center gap-6 flex-shrink-0">
             {navLinks.map((link) =>

@@ -54,7 +54,7 @@ const Footer = () => {
         </div>
       </div>
       {/* Copyright */}
-      <div className="w-full text-center text-xs sm:text-sm text-pink-400 font-medium py-2 sm:py-3 bg-pink-50 border-t border-pink-100">&copy; {new Date().getFullYear()} DI GROWS All Rights Reserved</div>
+      <div className="w-full text-center text-xs sm:text-sm text-pink-400 font-medium py-2 sm:py-3 bg-pink-50 border-t border-pink-100">&copy; {new Date().getFullYear()} Glowlii. All rights Reserved. Developed by DiGrows.</div>
     </footer>
   );
 };
