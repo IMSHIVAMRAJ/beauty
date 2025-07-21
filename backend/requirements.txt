@@ -1,4 +1,4 @@
-setuptools>=42
+setuptools>=61
 wheel
 absl-py==2.3.0
 accelerate==1.8.1
