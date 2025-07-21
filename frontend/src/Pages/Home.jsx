@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Mail, HelpCircle, Home as HomeIcon, Stethoscope, CalendarCheck2, Share2, MessageCircle, Sparkles, Droplets } from 'lucide-react';
 import ServicesModal from '../Components/ServicesModal';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import BottomNav from '../Components/BottomNav';
 
 const carouselImages = [
   'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&w=800',
@@ -20,13 +21,6 @@ const services = [
 ];
 
 const trendingTabs = ['Trending Services', 'Spa At Home', 'Hydra Facials'];
-
-const navLinks = [
-  { name: 'Home', icon: <HomeIcon className="w-6 h-6" />, href: '#' },
-  { name: 'Consultation', icon: <Stethoscope className="w-6 h-6" />, href: '#' },
-  { name: 'Booking', icon: <CalendarCheck2 className="w-6 h-6" />, href: '#' },
-  { name: 'Refer', icon: <Share2 className="w-6 h-6" />, href: '#' },
-];
 
 const ServiceCard = ({ img, title, subtitle, price, tag, offer, rating, reviews }) => (
   <div className="bg-gray-100 rounded-xl shadow-sm flex flex-col h-full transition hover:shadow-lg relative">
@@ -57,6 +51,7 @@ const ServiceCard = ({ img, title, subtitle, price, tag, offer, rating, reviews 
 const Home = () => {
 
     const navigate = useNavigate();
+    const location = useLocation();
 
   const [current, setCurrent] = useState(0);
   const [activeTrending, setActiveTrending] = useState(0);
@@ -74,6 +69,15 @@ const Home = () => {
       .then((res) => setTrendingServices(res.data))
       .catch((err) => console.error("Error fetching trending services", err));
   }, []);
+
+  useEffect(() => {
+    if (location.state && location.state.scrollToConsultant) {
+      const section = document.getElementById('ai-consultant-section');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [location]);
 
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans pb-14 md:pb-0">
@@ -162,7 +166,7 @@ const Home = () => {
       </section>
 
       {/* AI-Based Consultant Section */}
-      <section className="max-w-6xl mx-auto mt-10 mb-8 px-4">
+      <section id="ai-consultant-section" className="max-w-6xl mx-auto mt-10 mb-8 px-4">
         <h2 className="text-2xl sm:text-3xl font-extrabold text-pink-700 mb-6 text-center tracking-tight drop-shadow">AI-Based Consultant</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Skincare Consultant Card */}
@@ -197,19 +201,12 @@ const Home = () => {
       </section>
 
       {/* Bottom Nav */}
-      <nav className="fixed bottom-0 left-0 w-full bg-white border-t border-pink-100 flex justify-around items-center py-2 md:hidden z-30">
-        {navLinks.map((link) => (
-          <a key={link.name} href={link.href} className="flex flex-col items-center text-pink-600 hover:text-pink-800 transition">
-            {link.icon}
-            <span className="text-xs mt-0.5">{link.name}</span>
-          </a>
-        ))}
-      </nav>
+      <BottomNav />
 
       {/* AI Assistant Floating Button */}
       <button
         onClick={() => navigate("/ai/face-detect")}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-gradient-to-br from-[#E90000] to-[#FAA6FF] shadow-2xl flex items-center justify-center hover:scale-110 transition-transform border-4 border-white"
+        className="fixed bottom-20 right-6 z-50 w-16 h-16 rounded-full bg-gradient-to-br from-[#E90000] to-[#FAA6FF] shadow-2xl flex items-center justify-center hover:scale-110 transition-transform border-4 border-white md:bottom-6"
         aria-label="Open AI Assistant"
       >
         <span className="text-white text-2xl font-extrabold drop-shadow tracking-widest">AI</span>

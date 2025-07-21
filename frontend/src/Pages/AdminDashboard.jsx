@@ -5,7 +5,7 @@ import LocationManagement from "./LocationManagement";
 import CouponManagement from "./CouponManagement";
 import BookingControl from "./BookingControl";
 import BeauticianSlots from "./BeauticianSlots";
-import { LogOut } from 'lucide-react';
+import { LogOut, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -24,6 +24,7 @@ const AdminDashboard = () => {
   const [active, setActive] = useState(sections[0].name);
   const [hairData, setHairData] = useState([]);
   const [skinData, setSkinData] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // Add sidebar state
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -46,15 +47,36 @@ const AdminDashboard = () => {
   }, [active]);
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-[#E90000] to-[#FAA6FF]">
+    <div className="min-h-screen flex bg-gradient-to-br from-[#E90000] to-[#FAA6FF] relative">
+      {/* Mobile Sidebar Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
       {/* Sidebar */}
-      <aside className="w-64 bg-white/90 shadow-lg flex flex-col py-8 px-4 min-h-screen">
-        <h2 className="text-2xl font-extrabold text-black mb-8 text-center">Admin Dashboard</h2>
+      <aside
+        className={`
+          fixed z-50 top-0 left-0 h-full w-64 bg-white/90 shadow-lg flex flex-col py-8 px-4 min-h-screen transition-transform duration-300
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+          lg:static lg:translate-x-0 lg:flex
+        `}
+      >
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-extrabold text-black text-center w-full">Admin Dashboard</h2>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="lg:hidden p-2 rounded-lg hover:bg-gray-100 absolute right-4 top-4"
+          >
+            <LogOut className="w-5 h-5 rotate-45 text-gray-500" />
+          </button>
+        </div>
         <nav className="flex flex-col gap-2 flex-1">
           {sections.map((section) => (
             <button
               key={section.name}
-              onClick={() => setActive(section.name)}
+              onClick={() => { setActive(section.name); setSidebarOpen(false); }}
               className={`text-left px-4 py-3 rounded-lg font-semibold text-base transition-all duration-150 ${
                 active === section.name
                   ? "bg-gradient-to-r from-[#E90000] to-[#FAA6FF] text-white shadow"
@@ -74,8 +96,15 @@ const AdminDashboard = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col items-start p-8">
-        <div className="bg-white/90 rounded-2xl shadow-xl p-10 w-full min-h-[300px] flex flex-col items-start h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)] overflow-y-auto">
+      <main className="flex-1 flex flex-col items-start p-4 sm:p-8">
+        {/* Menu button for mobile */}
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="lg:hidden p-2 rounded-lg hover:bg-gray-100 mb-4"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
+        <div className="bg-white/90 rounded-2xl shadow-xl p-4 sm:p-10 w-full min-h-[300px] flex flex-col items-start h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)] overflow-y-auto">
           {active === "Beautician Management" && <BeauticianManagement />}
           {active === "Service Approval" && <ServiceApproval />}
           {active === "Location Management" && <LocationManagement />}
