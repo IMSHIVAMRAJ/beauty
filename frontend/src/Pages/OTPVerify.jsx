@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://beauty-backend-dc5m.onrender.com";
 
 const OTPVerify = () => {
   const location = useLocation();

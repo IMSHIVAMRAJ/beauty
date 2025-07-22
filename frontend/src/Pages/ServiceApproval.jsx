@@ -25,7 +25,7 @@ const ServiceApproval = () => {
   const fetchServices = async () => {
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await axios.get("http://localhost:5000/api/admin/getservices", {
+      const res = await axios.get("https://beauty-backend-dc5m.onrender.com/api/admin/getservices", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const fetched = res.data.services || res.data;
@@ -38,7 +38,7 @@ const ServiceApproval = () => {
   const handleApprove = async (id) => {
     try {
       const token = localStorage.getItem("adminToken");
-      await axios.patch(`http://localhost:5000/api/admin/service/${id}/approve`, {}, {
+      await axios.patch(`https://beauty-backend-dc5m.onrender.com/api/admin/service/${id}/approve`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setServices(prev =>
@@ -57,7 +57,7 @@ const ServiceApproval = () => {
     if (!window.confirm("Are you sure you want to delete this service?")) return;
     try {
       const token = localStorage.getItem("adminToken");
-      await axios.delete(`http://localhost:5000/api/admin/service/${id}`, {
+      await axios.delete(`https://beauty-backend-dc5m.onrender.com/api/admin/service/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setServices(prev => prev.filter(s => s._id !== id));
@@ -103,7 +103,7 @@ const ServiceApproval = () => {
 
     try {
       const token = localStorage.getItem("adminToken");
-      await axios.post("http://localhost:5000/api/admin/add-service", formData, {
+      await axios.post("https://beauty-backend-dc5m.onrender.com/api/admin/add-service", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

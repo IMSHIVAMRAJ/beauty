@@ -19,7 +19,7 @@ const BeauticianManagement = () => {
   const fetchBeauticians = async () => {
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await axios.get("http://localhost:5000/api/admin/beauticians", {
+      const res = await axios.get("https://beauty-backend-dc5m.onrender.com/api/admin/beauticians", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -56,7 +56,7 @@ const BeauticianManagement = () => {
 
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await axios.post("http://localhost:5000/api/admin/beautician/add", formData, {
+      const res = await axios.post("https://beauty-backend-dc5m.onrender.com/api/admin/beautician/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -74,7 +74,7 @@ const BeauticianManagement = () => {
   const handleRemove = async (id) => {
     try {
       const token = localStorage.getItem("adminToken");
-      await axios.delete(`http://localhost:5000/api/admin/beautician/${id}`, {
+      await axios.delete(`https://beauty-backend-dc5m.onrender.com/api/admin/beautician/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

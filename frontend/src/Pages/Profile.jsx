@@ -12,7 +12,7 @@ const Profile = () => {
   // Fetch user data from backend
   const fetchProfile = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/users/me", {
+      const { data } = await axios.get("https://beauty-backend-dc5m.onrender.com/api/users/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -35,7 +35,7 @@ const Profile = () => {
     e.preventDefault();
     try {
       const { data } = await axios.put(
-        "http://localhost:5000/api/users/update",
+        "https://beauty-backend-dc5m.onrender.com/api/users/update",
         {
           fullName: form.fullName,
           email: form.email,

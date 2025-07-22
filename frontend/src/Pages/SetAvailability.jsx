@@ -58,7 +58,7 @@ const SetAvailability = () => {
 
       const token = localStorage.getItem('beauticianToken');
       const res = await axios.post(
-        'http://localhost:5000/api/beautician/set-availability',
+        'https://beauty-backend-dc5m.onrender.com/api/beautician/set-availability',
         { slots },
         { headers: { Authorization: `Bearer ${token}` } }
       );

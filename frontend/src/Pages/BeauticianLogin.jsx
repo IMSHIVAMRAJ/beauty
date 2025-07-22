@@ -23,7 +23,7 @@ const BeauticianLogin = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/beautician/login", {
+      const res = await axios.post("https://beauty-backend-dc5m.onrender.com/api/beautician/login", {
         email,
         password,
       });

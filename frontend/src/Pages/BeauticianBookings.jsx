@@ -14,7 +14,7 @@ const BeauticianBookings = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5000/api/beautician/my-bookings', {
+        const { data } = await axios.get('https://beauty-backend-dc5m.onrender.com/api/beautician/my-bookings', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("beauticianToken")}`
           }

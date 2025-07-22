@@ -7,7 +7,7 @@ function isValidPhone(value) {
   return phoneRegex.test(value);
 }
 
-const BASE_URL = "http://localhost:5000"; // change this in prod
+const BASE_URL = "https://beauty-backend-dc5m.onrender.com"; // change this in prod
 
 const OTPLogin = () => {
   const [phone, setPhone] = useState("");

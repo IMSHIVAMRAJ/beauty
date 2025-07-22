@@ -19,7 +19,7 @@ const CouponManagement = () => {
   const fetchCoupons = async () => {
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await axios.get("http://localhost:5000/api/admin/coupons", {
+      const res = await axios.get("https://beauty-backend-dc5m.onrender.com/api/admin/coupons", {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("Coupons fetched:", res.data);
@@ -37,7 +37,7 @@ const CouponManagement = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await axios.post("http://localhost:5000/api/admin/coupon", form, {
+      const res = await axios.post("https://beauty-backend-dc5m.onrender.com/api/admin/coupon", form, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("Coupon added ✅");

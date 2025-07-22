@@ -13,7 +13,7 @@ const HairStudio = () => {
 
   const fetchSalonServices = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/services/allservices");
+      const res = await axios.get("https://beauty-backend-dc5m.onrender.com/api/services/allservices");
       const salonServices = res.data.filter(service => service.category === "Hair Studio");
 
       setAllServices(salonServices);

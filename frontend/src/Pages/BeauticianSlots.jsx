@@ -10,7 +10,7 @@ const BeauticianSlots = () => {
 
   const fetchBeauticianSlots = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/admin/beauticianslot", {
+      const { data } = await axios.get("https://beauty-backend-dc5m.onrender.com/api/admin/beauticianslot", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`, // 👈 if protected
         },

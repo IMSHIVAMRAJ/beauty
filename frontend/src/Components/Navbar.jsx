@@ -12,6 +12,8 @@ const navLinks = [
   { name: 'Refer', icon: <Share2 className="w-5 h-5 mr-1" />, href: '/referral' },
 ];
 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
 const Navbar = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
@@ -19,6 +21,7 @@ const Navbar = () => {
   const [showResults, setShowResults] = useState(false);
   const { cart } = useCart();
   const cartCount = cart.length;
+  
 
 const handleResultClick = (item) => {
   const category = item.categorySlug || item.categoryName || 'makeup-at-home'; // fallback
@@ -60,12 +63,13 @@ const handleResultClick = (item) => {
   const [profileDropdown, setProfileDropdown] = useState(false);
   const profileRef = useRef(null);
   const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(localStorage.getItem('token')));
+  
 
   // ---------- Location & Profile Dropdown Effects ----------
   useEffect(() => {
     if (locationDropdown && locations.length === 0) {
       setLoadingLocations(true);
-      fetch('/api/locations')
+      fetch(`${API_BASE_URL}/api/locations`)
         .then(res => res.json())
         .then(data => data.success ? setLocations(data.locations) : setError(data.message || 'Failed to load locations.'))
         .catch(() => setError('Network error.'))
@@ -93,7 +97,7 @@ const handleResultClick = (item) => {
       async (pos) => {
         const { latitude, longitude } = pos.coords;
         try {
-          const res = await fetch('/api/locations/reverse-geocode', {
+          const res = await fetch(`${API_BASE_URL}/api/locations/reverse-geocode`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ lat: latitude, lng: longitude }),

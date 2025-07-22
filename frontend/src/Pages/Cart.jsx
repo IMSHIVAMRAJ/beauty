@@ -59,7 +59,7 @@ const Cart = () => {
 
     try {
       const { data: order } = await axios.post(
-        "http://localhost:5000/api/booking/create-payment",
+        "https://beauty-backend-dc5m.onrender.com/api/booking/create-payment",
         {
           amount: total,
         },
@@ -80,7 +80,7 @@ const Cart = () => {
         handler: async function (response) {
           try {
             await axios.post(
-              "http://localhost:5000/api/booking/confirm",
+              "https://beauty-backend-dc5m.onrender.com/api/booking/confirm",
               {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
@@ -135,7 +135,7 @@ const Cart = () => {
   const fetchBookings = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/booking/my-bookings",
+        "https://beauty-backend-dc5m.onrender.com/api/booking/my-bookings",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

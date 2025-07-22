@@ -34,13 +34,13 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     if (active === "Hair Problem") {
-      axios.get("http://localhost:5001/ai/hair-recommend")
+      axios.get("https://ai-flask-acit.onrender.com/ai/hair-recommend")
         .then(res => setHairData(res.data))
         .catch(err => console.error("Error fetching hair recommendations:", err));
     }
 
     if (active === "Skin Problem") {
-      axios.get("http://localhost:5001/ai/skin-recommend")
+      axios.get("https://ai-flask-acit.onrender.com/ai/skin-recommend")
         .then(res => setSkinData(res.data))
         .catch(err => console.error("Error fetching skin recommendations:", err));
     }

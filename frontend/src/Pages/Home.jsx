@@ -65,7 +65,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/services/trending")
+    axios.get("https://beauty-backend-dc5m.onrender.com/api/services/trending")
       .then((res) => setTrendingServices(res.data))
       .catch((err) => console.error("Error fetching trending services", err));
   }, []);

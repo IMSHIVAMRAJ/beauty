@@ -8,7 +8,7 @@ const AdminBookingControl = () => {
 
   const fetchBookings = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/admin/allbookings", {
+      const { data } = await axios.get("https://beauty-backend-dc5m.onrender.com/api/admin/allbookings", {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       setBookings(data);
@@ -19,7 +19,7 @@ const AdminBookingControl = () => {
 
   const fetchBeauticians = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/admin/beauticians", {
+      const { data } = await axios.get("https://beauty-backend-dc5m.onrender.com/api/admin/beauticians", {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       setBeauticians(data);
@@ -31,7 +31,7 @@ const AdminBookingControl = () => {
   const assignBeautician = async (bookingId, beauticianId) => {
     try {
       await axios.patch(
-        `http://localhost:5000/api/admin/bookings/${bookingId}/assign`,
+        `https://beauty-backend-dc5m.onrender.com/api/admin/bookings/${bookingId}/assign`,
         { beauticianId },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },

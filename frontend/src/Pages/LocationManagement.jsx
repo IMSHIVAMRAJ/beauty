@@ -14,7 +14,7 @@ const LocationManagement = () => {
   const fetchLocations = async () => {
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await axios.get("http://localhost:5000/api/admin/locations", {
+      const res = await axios.get("https://beauty-backend-dc5m.onrender.com/api/admin/locations", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -34,7 +34,7 @@ const LocationManagement = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await axios.post("http://localhost:5000/api/admin/location", form, {
+      const res = await axios.post("https://beauty-backend-dc5m.onrender.com/api/admin/location", form, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

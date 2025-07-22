@@ -29,7 +29,7 @@ const AdminLogin = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/admin-auth/login", {
+      const res = await fetch("https://beauty-backend-dc5m.onrender.com/api/admin-auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: trimmedEmail, password: trimmedPassword }),
