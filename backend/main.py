@@ -13,7 +13,7 @@ from predict2 import predict_recommendation
 from database.mongodb import save_to_db1, get_all_hair_recommendations  # ✅ both hair functions
 
 app = Flask(__name__)
-CORS(app, resources={r"/ai/*": {"origins": "http://localhost:5173"}})
+CORS(app, resources={r"/ai/*": {"origins": "https://glowlii.in"}})
 
 # Load ML model and service map
 model = joblib.load("models/beauty.pkl")

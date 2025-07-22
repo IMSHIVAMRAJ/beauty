@@ -76,7 +76,7 @@ const SkinAnalysisFormPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch("http://localhost:5001/ai/analyze", {
+            const res = await fetch("https://ai-flask-acit.onrender.com/ai/analyze", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),

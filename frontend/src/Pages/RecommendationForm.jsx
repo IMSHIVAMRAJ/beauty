@@ -33,7 +33,7 @@ const RecommendationForm = () => {
         }
 
         try {
-            await axios.post("http://localhost:5001/ai/recommend", {
+            await axios.post("https://ai-flask-acit.onrender.com/ai/recommend", {
                 name,
                 phone,
                 gender: gender?.toLowerCase(),

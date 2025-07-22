@@ -36,7 +36,7 @@ export default function HairRecommendationForm() {
         setSubmitted(false);
 
         try {
-            await axios.post("http://localhost:5001/ai/hair-recommend", {
+            await axios.post("https://ai-flask-acit.onrender.com/ai/hair-recommend", {
                 name,
                 phone,
                 gender,
