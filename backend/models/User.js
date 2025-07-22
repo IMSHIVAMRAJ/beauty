@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
   fullName: String,
   phone: { type: String, required: true, unique: true },
+   isVerified: { type: Boolean, default: false },
   email: String,
   gender: String,
   location: String,
