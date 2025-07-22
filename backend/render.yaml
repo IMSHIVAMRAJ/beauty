@@ -1,9 +1,7 @@
 services:
   - type: web
-    name: your-flask-app
-    env: python
-    buildCommand: pip install --upgrade pip setuptools wheel && pip install -r requirements.txt
-    startCommand: python main.py
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.10
+    name: yes-madam-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    rootDir: .
