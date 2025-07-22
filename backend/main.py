@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import joblib
 import json
+import os
 from preprocess import preprocess_input
 from flask_cors import CORS
 from predict import predict_service
@@ -132,4 +133,5 @@ def get_all_skin_recommend():
 # ---------------- Main ----------------
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    port = int(os.environ.get("PORT", 5001))  # Render will inject PORT
+    app.run(host="0.0.0.0", port=port)
